@@ -9,11 +9,12 @@ import { getServiceVersion } from './parser/getServiceVersion';
  * Parse the OpenAPI specification to a Client model that contains
  * all the models, services and schema's we should output.
  * @param openApi The OpenAPI spec  that we have loaded from disk.
+ * @param responseComponentAsSchema: Convert responses to schemas.
  */
-export function parse(openApi: OpenApi): Client {
+export function parse(openApi: OpenApi, responseComponentAsSchema: boolean): Client {
     const version = getServiceVersion(openApi.info.version);
     const server = getServer(openApi);
-    const models = getModels(openApi);
+    const models = getModels(openApi, responseComponentAsSchema);
     const services = getServices(openApi);
 
     return { version, server, models, services };
