@@ -20,7 +20,7 @@ export type Options = {
     exportServices?: boolean;
     exportModels?: boolean;
     exportSchemas?: boolean;
-    responseComponentAsSchema: boolean,
+    responseSchemaAsModel: boolean,
     request?: string;
     write?: boolean;
 };
@@ -38,7 +38,7 @@ export type Options = {
  * @param exportServices: Generate services
  * @param exportModels: Generate models
  * @param exportSchemas: Generate schemas
- * @param responseComponentAsSchema: Convert responses to schemas
+ * @param responseSchemaAsModel: Convert responses to schemas
  * @param request: Path to custom request file
  * @param write Write the files to disk (true or false)
  */
@@ -52,7 +52,7 @@ export async function generate({
     exportServices = true,
     exportModels = true,
     exportSchemas = false,
-    responseComponentAsSchema = true,
+    responseSchemaAsModel = true,
     request,
     write = true,
 }: Options): Promise<void> {
@@ -74,7 +74,7 @@ export async function generate({
         }
 
         case OpenApiVersion.V3: {
-            let client = parseV3(openApi, responseComponentAsSchema);
+            let client = parseV3(openApi, responseSchemaAsModel);
             client = postProcessClient(client);
             if (!write) break;
             await writeClient(client, templates, output, httpClient, useOptions, useUnionTypes, exportCore, exportServices, exportModels, exportSchemas, request);

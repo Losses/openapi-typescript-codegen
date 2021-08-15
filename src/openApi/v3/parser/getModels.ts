@@ -7,7 +7,7 @@ import { getModel } from './getModel';
 import { getType } from './getType';
 import { getResponseModelName } from './getResponseModelName'
 
-export function getModels(openApi: OpenApi, responseComponentAsSchema: boolean): Model[] {
+export function getModels(openApi: OpenApi, responseSchemaAsModel: boolean): Model[] {
     const models: Model[] = [];
     if (openApi.components) {
         for (const definitionName in openApi.components.schemas) {
@@ -19,7 +19,7 @@ export function getModels(openApi: OpenApi, responseComponentAsSchema: boolean):
             }
         }
 
-        if (responseComponentAsSchema && openApi.components.responses) {
+        if (responseSchemaAsModel && openApi.components.responses) {
             Object
                 .entries(openApi.components.responses)
                 .forEach(([definitionName, definition]) => {
