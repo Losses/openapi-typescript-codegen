@@ -1,5 +1,10 @@
 {{>header}}
 
+{{#if runtimeValidation}}
+import type { ValidateFunction } from 'ajv';
+import betterAjvErrors from 'better-ajv-errors';
+{{/if}}
+
 import { ApiError } from './ApiError';
 import type { ApiRequestOptions } from './ApiRequestOptions';
 import type { ApiResult } from './ApiResult';
@@ -46,6 +51,10 @@ import { OpenAPI } from './OpenAPI';
 
 {{>functions/catchErrors}}
 
+{{#if runtimeValidation}}
+{{>functions/validateResponse}}
+{{/if}}
+
 
 /**
  * Request using fetch client
@@ -58,6 +67,10 @@ export async function request(options: ApiRequestOptions): Promise<ApiResult> {
     const response = await sendRequest(options, url);
     const responseBody = await getResponseBody(response);
     const responseHeader = getResponseHeader(response, options.responseHeader);
+
+    {{#if runtimeValidation}}
+    validateResponse(url, responseBody, response.statusText, options.schemas);
+    {{/if}}
 
     const result: ApiResult = {
         url,

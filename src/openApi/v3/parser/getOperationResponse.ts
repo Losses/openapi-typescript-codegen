@@ -7,7 +7,7 @@ import { getContent } from './getContent';
 import { getModel } from './getModel';
 import { getType } from './getType';
 
-export function getOperationResponse(openApi: OpenApi, response: OpenApiResponse, responseCode: number): OperationResponse {
+export function getOperationResponse(openApi: OpenApi, response: OpenApiResponse, responseCode: number, isDefault: boolean, isAny: boolean): OperationResponse {
     const operationResponse: OperationResponse = {
         in: 'response',
         name: '',
@@ -18,6 +18,8 @@ export function getOperationResponse(openApi: OpenApi, response: OpenApiResponse
         base: 'any',
         template: null,
         link: null,
+        isDefault,
+        isAny,
         isDefinition: false,
         isReadOnly: false,
         isRequired: false,

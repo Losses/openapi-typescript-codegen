@@ -20,7 +20,8 @@ export type Options = {
     exportServices?: boolean;
     exportModels?: boolean;
     exportSchemas?: boolean;
-    responseSchemaAsModel: boolean,
+    responseSchemaAsModel?: boolean,
+    runtimeValidation?: boolean,
     request?: string;
     write?: boolean;
 };
@@ -39,6 +40,7 @@ export type Options = {
  * @param exportModels: Generate models
  * @param exportSchemas: Generate schemas
  * @param responseSchemaAsModel: Convert responses to schemas
+ * @param runtimeValidation: Check if check data type from service side is valid while fetching the data
  * @param request: Path to custom request file
  * @param write Write the files to disk (true or false)
  */
@@ -53,6 +55,7 @@ export async function generate({
     exportModels = true,
     exportSchemas = false,
     responseSchemaAsModel = true,
+    runtimeValidation = true,
     request,
     write = true,
 }: Options): Promise<void> {
@@ -69,7 +72,7 @@ export async function generate({
             const client = parseV2(openApi);
             const clientFinal = postProcessClient(client);
             if (!write) break;
-            await writeClient(clientFinal, templates, output, httpClient, useOptions, useUnionTypes, exportCore, exportServices, exportModels, exportSchemas, request);
+            await writeClient(clientFinal, templates, output, httpClient, useOptions, useUnionTypes, exportCore, exportServices, exportModels, exportSchemas, responseSchemaAsModel, request);
             break;
         }
 
@@ -77,7 +80,7 @@ export async function generate({
             let client = parseV3(openApi, responseSchemaAsModel);
             client = postProcessClient(client);
             if (!write) break;
-            await writeClient(client, templates, output, httpClient, useOptions, useUnionTypes, exportCore, exportServices, exportModels, exportSchemas, request);
+            await writeClient(client, templates, output, httpClient, useOptions, useUnionTypes, exportCore, exportServices, exportModels, exportSchemas, runtimeValidation, request);
             break;
         }
     }

@@ -11,18 +11,20 @@ import { Templates } from './registerHandlebarTemplates';
  * @param templates The loaded handlebar templates
  * @param outputPath Directory to write the generated files to
  * @param httpClient The selected httpClient (fetch, xhr or node)
+ * @param runtimeValidation: Check if check data type from service side is valid while fetching the data
  * @param request: Path to custom request file
  */
-export async function writeClientCore(client: Client, templates: Templates, outputPath: string, httpClient: HttpClient, request?: string): Promise<void> {
+export async function writeClientCore(client: Client, templates: Templates, outputPath: string, httpClient: HttpClient, runtimeValidation: boolean, request?: string): Promise<void> {
     const context = {
         httpClient,
         server: client.server,
         version: client.version,
+        runtimeValidation,
     };
 
     await writeFile(resolve(outputPath, 'OpenAPI.ts'), templates.core.settings(context));
     await writeFile(resolve(outputPath, 'ApiError.ts'), templates.core.apiError({}));
-    await writeFile(resolve(outputPath, 'ApiRequestOptions.ts'), templates.core.apiRequestOptions({}));
+    await writeFile(resolve(outputPath, 'ApiRequestOptions.ts'), templates.core.apiRequestOptions({ }));
     await writeFile(resolve(outputPath, 'ApiResult.ts'), templates.core.apiResult({}));
     await writeFile(resolve(outputPath, 'request.ts'), templates.core.request(context));
 

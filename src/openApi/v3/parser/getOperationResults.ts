@@ -31,6 +31,8 @@ export function getOperationResults(operationResponses: OperationResponse[]): Op
             base: 'void',
             template: null,
             link: null,
+            isDefault: false,
+            isAny: false,
             isDefinition: false,
             isReadOnly: false,
             isRequired: false,

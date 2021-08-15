@@ -23,6 +23,7 @@ import { writeClientServices } from './writeClientServices';
  * @param exportServices: Generate services
  * @param exportModels: Generate models
  * @param exportSchemas: Generate schemas
+ * @param runtimeValidation: Check if check data type from service side is valid while fetching the data
  * @param request: Path to custom request file
  */
 export async function writeClient(
@@ -36,6 +37,7 @@ export async function writeClient(
     exportServices: boolean,
     exportModels: boolean,
     exportSchemas: boolean,
+    runtimeValidation: boolean,
     request?: string
 ): Promise<void> {
     const outputPath = resolve(process.cwd(), output);
@@ -51,13 +53,13 @@ export async function writeClient(
     if (exportCore) {
         await rmdir(outputPathCore);
         await mkdir(outputPathCore);
-        await writeClientCore(client, templates, outputPathCore, httpClient, request);
+        await writeClientCore(client, templates, outputPathCore, httpClient, runtimeValidation, request);
     }
 
     if (exportServices) {
         await rmdir(outputPathServices);
         await mkdir(outputPathServices);
-        await writeClientServices(client.services, templates, outputPathServices, httpClient, useUnionTypes, useOptions);
+        await writeClientServices(client.services, templates, outputPathServices, httpClient, useUnionTypes, useOptions, runtimeValidation);
     }
 
     if (exportSchemas) {

@@ -17,6 +17,8 @@ export function getOperationResponse(openApi: OpenApi, response: OpenApiResponse
         base: 'any',
         template: null,
         link: null,
+        isDefault: false,
+        isAny: false,
         isDefinition: false,
         isReadOnly: false,
         isRequired: false,

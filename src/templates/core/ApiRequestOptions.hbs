@@ -1,5 +1,9 @@
 {{>header}}
 
+{{#if runtimeValidation}}
+import type { ValidateFunction } from 'ajv';
+{{/if}}
+
 export type ApiRequestOptions = {
     readonly method: 'GET' | 'PUT' | 'POST' | 'DELETE' | 'OPTIONS' | 'HEAD' | 'PATCH';
     readonly path: string;
@@ -11,4 +15,9 @@ export type ApiRequestOptions = {
     readonly mediaType?: string;
     readonly responseHeader?: string;
     readonly errors?: Record<number, string>;
+    {{#if runtimeValidation}}
+    readonly schemas?: Record<string, ValidateFunction>;
+    {{else}}
+    readonly schemas?: Record<string, any>;
+    {{/if}}
 }

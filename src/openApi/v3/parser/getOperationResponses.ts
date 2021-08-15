@@ -16,9 +16,12 @@ export function getOperationResponses(openApi: OpenApi, responses: OpenApiRespon
             const responseOrReference = responses[code];
             const response = getRef<OpenApiResponse>(openApi, responseOrReference);
             const responseCode = getOperationResponseCode(code);
+            const isDefault = code === 'default';
+            
+            const isAny = !responseOrReference.hasOwnProperty('content') && !responseOrReference.hasOwnProperty('$ref');
 
             if (responseCode) {
-                const operationResponse = getOperationResponse(openApi, response, responseCode);
+                const operationResponse = getOperationResponse(openApi, response, responseCode, isDefault, isAny);
                 operationResponses.push(operationResponse);
             }
         }

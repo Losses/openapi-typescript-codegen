@@ -20,6 +20,7 @@ const params = program
     .option('--exportModels <value>', 'Write models to disk', true)
     .option('--exportSchemas <value>', 'Write schemas to disk', false)
     .option('--responseSchemaAsModel <value>', 'Convert response component to schema', true)
+    .option('--runtimeValidation <value>', 'Check if check data type from service side is valid while fetching the data', true)
     .option('--request <value>', 'Path to custom request file')
     .parse(process.argv)
     .opts();
@@ -38,6 +39,7 @@ if (OpenAPI) {
         exportModels: JSON.parse(params.exportModels) === true,
         exportSchemas: JSON.parse(params.exportSchemas) === true,
         responseSchemaAsModel: JSON.parse(params.responseSchemaAsModel) === true,
+        runtimeValidation: JSON.parse(params.runtimeValidation) === true,
         request: params.request,
     })
         .then(() => {

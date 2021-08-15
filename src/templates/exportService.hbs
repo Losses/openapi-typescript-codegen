@@ -1,13 +1,36 @@
 {{>header}}
 
+{{#if runtimeValidation}}
+import Ajv from "ajv"
+{{/if}}
+
 {{#if imports}}
 {{#each imports}}
 import type { {{{this}}} } from '../models/{{{this}}}';
 {{/each}}
+
+{{#if runtimeValidation}}
+{{#each imports}}
+import { ${{{this}}} } from '../schemas/${{{this}}}';
+{{/each}}
 {{/if}}
+{{/if}}
+
 import { request as __request } from '../core/request';
 {{#if @root.useVersion}}
 import { OpenAPI } from '../core/OpenAPI';
+{{/if}}
+
+{{#if runtimeValidation}}
+const ajv = new Ajv();
+{{/if}}
+
+{{#if runtimeValidation}}
+{{#if imports}}
+{{#each imports}}
+const {{{this}}}Validator = ajv.compile(${{{this}}});
+{{/each}}
+{{/if}}
 {{/if}}
 
 export class {{{name}}} {
@@ -83,6 +106,17 @@ export class {{{name}}} {
                 {{/each}}
             },
             {{/if}}
+            schemas: {
+                {{#each results}}
+                {{#unless isAny}}
+                {{#if isDefault}}
+                'default': {{{type}}}Validator,
+                {{else}}
+                '{{{code}}}': {{{type}}}Validator,
+                {{/if}}
+                {{/unless}}
+                {{/each}}
+            },
         });
         return result.body;
     }
