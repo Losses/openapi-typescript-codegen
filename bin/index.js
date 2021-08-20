@@ -37,7 +37,7 @@ if (OpenAPI) {
         exportCore: JSON.parse(params.exportCore) === true,
         exportServices: JSON.parse(params.exportServices) === true,
         exportModels: JSON.parse(params.exportModels) === true,
-        exportSchemas: JSON.parse(params.exportSchemas) === true,
+        exportSchemas: params.exportSchemas,
         responseSchemaAsModel: JSON.parse(params.responseSchemaAsModel) === true,
         runtimeValidation: JSON.parse(params.runtimeValidation) === true,
         request: params.request,
