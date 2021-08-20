@@ -51,21 +51,22 @@ interface IActionCallback {
 interface I{{{name}}}Controller {
     fetchData: ({{>parameters}}
         options?: ApiRequestOptions,
-        cb?: IActionCallback
+        cb?: IActionCallback,
+        setter: (update: SetStateAction<IResult>) => void,
     ) => void;
 };
 
 {{/each}}
 
 {{#each operations}}
-export function {{{name}}}():[IResult, (update: SetStateAction<IResult>) => void, I{{{name}}}Controller] {
+export function {{{hookName}}}():[IResult, I{{{name}}}Controller] {
     const {{{name}}}ResultAtom = atom<IResult>({ loading: false, error: null, data: null });
-    const [resultAtom, set] = useAtom({{{name}}}ResultAtom);
+    const [resultAtom, setter] = useAtom({{{name}}}ResultAtom);
     const fetchData = async ({{>parameters}}
         options?: ApiRequestOptions,
         cb?: IActionCallback
     ) => {
-        set({ ...resultAtom, loading: true })
+        setter({ ...resultAtom, loading: true })
         try {
             const result = await __request({
                 {{#if parametersCookie}}
@@ -128,21 +129,21 @@ export function {{{name}}}():[IResult, (update: SetStateAction<IResult>) => void
                 path: `{{{path}}}`,
             });
             if(cb) {
-                cb.call(null, resultAtom, set, result);
+                cb.call(null, resultAtom, setter, result);
             } else {
                 const data = await result.body()
-                set({ loading: false, error: null, data });
+                setter({ loading: false, error: null, data });
             }
         } catch (error) {
-            set({ loading: false, error, data: null });
+            setter({ loading: false, error, data: null });
         }
     };
     const controller = {
         fetchData,
+        setter,
     };
     return [
         resultAtom,
-        set,
         controller
     ];
 }
