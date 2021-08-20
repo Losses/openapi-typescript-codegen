@@ -71,7 +71,7 @@ OpenAPI.generate({
 });
 ```
 
-### using
+### Using
 
 **Basic usage**
 
