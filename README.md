@@ -88,21 +88,37 @@ roleController.fetchData(1);
 Like setting `localStorage` after a login request.
 
 ```typescript
+roleController.fetchData(1, {}, (atom, set, result)=>{
+    set({ ...atom, data: result.body });
+    localStorage.setItem('xxx', result.body);
+});
 ```
 
 **Credential**
 
 ```typescript
+roleController.fetchData(1, {
+    headers: {
+        'xxx': 'xxx',
+    },
+});
 ```
 
 **Request body of a post request**
 
 ```typescript
+CreateRoleController.fetchData({
+    name: 'xxx',
+    permissions: ['xxx'],
+});
 ```
 
 **Infinite scrolling**
 
 ```typescript
+roleController.fetchData(1, {}, (atom, set, result)=>{
+    set({ ...atom, data: atom.data.concat(result)})
+});
 ```
 
 ****
