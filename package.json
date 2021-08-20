@@ -1,15 +1,15 @@
 {
     "name": "openapi-typescript-codegen",
-    "version": "0.9.3",
-    "description": "Library that generates Typescript clients based on the OpenAPI specification.",
+    "version": "0.0.1",
+    "description": "Library that generates React Hooks based on the OpenAPI specification.",
     "author": "Ferdi Koomen",
-    "homepage": "https://github.com/ferdikoomen/openapi-typescript-codegen",
+    "homepage": "https://github.com/jibencaozuo-playground/openapi-hooks-codegen",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/ferdikoomen/openapi-typescript-codegen.git"
+        "url": "git+https://github.com/jibencaozuo-playground/openapi-hooks-codegen"
     },
     "bugs": {
-        "url": "https://github.com/ferdikoomen/openapi-typescript-codegen/issues"
+        "url": "https://github.com/jibencaozuo-playground/openapi-hooks-codegen/issues"
     },
     "license": "MIT",
     "keywords": [
@@ -27,8 +27,8 @@
     ],
     "maintainers": [
         {
-            "name": "Ferdi Koomen",
-            "email": "info@madebyferdi.com"
+            "name": "Jibencaozuo Playground",
+            "email": "dev@jibencaozuo.com"
         }
     ],
     "main": "dist/index.js",
