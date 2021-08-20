@@ -1,5 +1,5 @@
 {
-    "name": "@jbcz/openapi-typescript-codegen",
+    "name": "@jbcz/openapi-hooks-codegen",
     "version": "0.0.1",
     "description": "Library that generates React Hooks based on the OpenAPI specification.",
     "author": "Ferdi Koomen",

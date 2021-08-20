@@ -1,4 +1,4 @@
-# OpenAPI Typescript Codegen
+# OpenAPI Hooks Codegen
 
 [![NPM][npm-image]][npm-url]
 [![License][license-image]][license-url]
@@ -57,7 +57,7 @@ npx openapi-typescript-codegen --input ./spec.json --output ./dist
 **Node.js API**
 
 ```javascript
-const OpenAPI = require('openapi-typescript-codegen');
+const OpenAPI = require('openapi-hooks-codegen');
 
 OpenAPI.generate({
     input: './spec.json',
