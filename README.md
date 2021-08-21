@@ -92,9 +92,9 @@ import { useGetRole } from './api/services/AdminService'
 
 const [role, roleController] = useGetRole();
 
-roleController.fetchData(1, {}, (atom, set, result)=>{
+roleController.fetchData(1, {}, (atom, set, result) => {
     set({ ...atom, data: result.body });
-    localStorage.setItem('xxx', result.body);
+    localStorage.setItem('token', result.body);
 });
 ```
 
@@ -107,7 +107,7 @@ const [role, roleController] = useGetRole();
 
 roleController.fetchData(1, {
     headers: {
-        'xxx': 'xxx',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
     },
 });
 ```
@@ -132,8 +132,11 @@ import { useGetRole } from './api/services/AdminService'
 
 const [role, roleController] = useGetRole();
 
-roleController.fetchData(1, {}, (atom, set, result)=>{
-    set({ ...atom, data: atom.data.concat(result)})
+roleController.fetchData(1, {}, (atom, set, result) => {
+    set({
+        ...atom, 
+        data: atom.data.concat(result)
+    })
 });
 ```
 
