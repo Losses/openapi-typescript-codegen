@@ -124,6 +124,7 @@ const [role, createRoleController] = useCreateRole();
 createRoleController.fetchData({
     name: 'xxx',
     permissions: ['xxx'],
+    // ...
 });
 ```
 
@@ -137,7 +138,7 @@ const [role, roleController] = useGetRole();
 roleController.fetchData(1, {}, (atom, set, result) => {
     set({
         ...atom, 
-        data: atom.data.concat(result)
+        data: atom.data.concat(result),
     })
 });
 ```
