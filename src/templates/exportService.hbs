@@ -52,7 +52,7 @@ interface I{{{name}}}Controller {
     fetchData: ({{>parameters}}
         options?: ApiRequestOptions,
         cb?: IActionCallback,
-        setter: (update: SetStateAction<IResult>) => void,
+        setter?: (update: SetStateAction<IResult>) => void,
     ) => void;
 };
 
