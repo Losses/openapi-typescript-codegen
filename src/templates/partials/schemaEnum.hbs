@@ -1,5 +1,6 @@
 {
-    type: 'Enum',
+    type: '{{{base}}}',
+    enum: [{{#each enum}}{{{value}}}{{#unless @last}}, {{/unless}}{{/each}}],
 {{#if isReadOnly}}
     isReadOnly: {{{isReadOnly}}},
 {{/if}}
