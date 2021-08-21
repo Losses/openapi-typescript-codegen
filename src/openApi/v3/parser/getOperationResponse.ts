@@ -24,6 +24,7 @@ export function getOperationResponse(openApi: OpenApi, response: OpenApiResponse
         isReadOnly: false,
         isRequired: false,
         isNullable: false,
+        isReference: false,
         imports: [],
         enum: [],
         enums: [],
@@ -40,6 +41,7 @@ export function getOperationResponse(openApi: OpenApi, response: OpenApiResponse
                 operationResponse.base = model.base;
                 operationResponse.template = model.template;
                 operationResponse.imports.push(...model.imports);
+                operationResponse.isReference = true;
                 return operationResponse;
             } else {
                 const model = getModel(openApi, schema);
@@ -66,6 +68,7 @@ export function getOperationResponse(openApi: OpenApi, response: OpenApiResponse
                 operationResponse.minProperties = model.minProperties;
                 operationResponse.pattern = getPattern(model.pattern);
                 operationResponse.imports.push(...model.imports);
+                operationResponse.isReference = model.isReference;
                 operationResponse.enum.push(...model.enum);
                 operationResponse.enums.push(...model.enums);
                 operationResponse.properties.push(...model.properties);

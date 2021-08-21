@@ -3,9 +3,13 @@
 {{#if link}}
     contains: {{>schema link}},
 {{else}}
+{{#if isReference}}
+    contains: ${{{base}}},
+{{else}}
     contains: {
         type: '{{{base}}}',
     },
+{{/if}}
 {{/if}}
 {{#if isReadOnly}}
     isReadOnly: {{{isReadOnly}}},

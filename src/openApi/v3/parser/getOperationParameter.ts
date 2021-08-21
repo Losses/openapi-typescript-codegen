@@ -23,6 +23,7 @@ export function getOperationParameter(openApi: OpenApi, parameter: OpenApiParame
         isReadOnly: false,
         isRequired: parameter.required === true,
         isNullable: parameter.nullable === true,
+        isReference: false,
         imports: [],
         enum: [],
         enums: [],
@@ -37,6 +38,7 @@ export function getOperationParameter(openApi: OpenApi, parameter: OpenApiParame
         operationParameter.base = definitionRef.base;
         operationParameter.template = definitionRef.template;
         operationParameter.imports.push(...definitionRef.imports);
+        operationParameter.isReference = true;
         return operationParameter;
     }
 
@@ -48,6 +50,7 @@ export function getOperationParameter(openApi: OpenApi, parameter: OpenApiParame
             operationParameter.base = model.base;
             operationParameter.template = model.template;
             operationParameter.imports.push(...model.imports);
+            operationParameter.isReference = true;
             operationParameter.default = getModelDefault(parameter.schema);
             return operationParameter;
         } else {
@@ -76,6 +79,7 @@ export function getOperationParameter(openApi: OpenApi, parameter: OpenApiParame
             operationParameter.pattern = getPattern(model.pattern);
             operationParameter.default = model.default;
             operationParameter.imports.push(...model.imports);
+            operationParameter.isReference = model.isReference;
             operationParameter.enum.push(...model.enum);
             operationParameter.enums.push(...model.enums);
             operationParameter.properties.push(...model.properties);

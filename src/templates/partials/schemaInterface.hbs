@@ -2,7 +2,11 @@
     properties: {
 {{#if properties}}
     {{#each properties}}
+        {{#if isReference}}
+        {{{name}}}: ${{{base}}},
+        {{else}}
         {{{name}}}: {{>schema}},
+        {{/if}}
     {{/each}}
 {{/if}}
     },

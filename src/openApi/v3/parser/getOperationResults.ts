@@ -37,6 +37,7 @@ export function getOperationResults(operationResponses: OperationResponse[]): Op
             isReadOnly: false,
             isRequired: false,
             isNullable: false,
+            isReference: false,
             imports: [],
             enum: [],
             enums: [],

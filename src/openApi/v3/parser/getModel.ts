@@ -24,6 +24,7 @@ export function getModel(openApi: OpenApi, definition: OpenApiSchema, isDefiniti
         isReadOnly: definition.readOnly === true,
         isNullable: definition.nullable === true,
         isRequired: definition.default !== undefined,
+        isReference: false,
         format: definition.format,
         maximum: definition.maximum,
         exclusiveMaximum: definition.exclusiveMaximum,
@@ -52,6 +53,7 @@ export function getModel(openApi: OpenApi, definition: OpenApiSchema, isDefiniti
         model.template = definitionRef.template;
         model.imports.push(...definitionRef.imports);
         model.default = getModelDefault(definition, model);
+        model.isReference = true;
         return model;
     }
 
@@ -89,6 +91,7 @@ export function getModel(openApi: OpenApi, definition: OpenApiSchema, isDefiniti
             model.template = arrayItems.template;
             model.imports.push(...arrayItems.imports);
             model.default = getModelDefault(definition, model);
+            model.isReference = true;
             return model;
         } else {
             const arrayItems = getModel(openApi, definition.items);
@@ -98,6 +101,7 @@ export function getModel(openApi: OpenApi, definition: OpenApiSchema, isDefiniti
             model.template = arrayItems.template;
             model.link = arrayItems;
             model.imports.push(...arrayItems.imports);
+            model.isReference = arrayItems.isReference;
             model.default = getModelDefault(definition, model);
             return model;
         }
@@ -112,6 +116,7 @@ export function getModel(openApi: OpenApi, definition: OpenApiSchema, isDefiniti
             model.template = additionalProperties.template;
             model.imports.push(...additionalProperties.imports);
             model.default = getModelDefault(definition, model);
+            model.isReference = true;
             return model;
         } else {
             const additionalProperties = getModel(openApi, definition.additionalProperties);
@@ -122,6 +127,7 @@ export function getModel(openApi: OpenApi, definition: OpenApiSchema, isDefiniti
             model.link = additionalProperties;
             model.imports.push(...additionalProperties.imports);
             model.default = getModelDefault(definition, model);
+            model.isReference = additionalProperties.isReference;
             return model;
         }
     }

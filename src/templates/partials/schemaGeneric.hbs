@@ -1,3 +1,6 @@
+{{#if isReference}}
+${{base}}
+{{else}}
 {
 {{#if type}}
     type: '{{{base}}}',
@@ -54,3 +57,4 @@
     minProperties: {{{minProperties}}},
 {{/if}}
 }
+{{/if}}

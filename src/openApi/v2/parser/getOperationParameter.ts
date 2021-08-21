@@ -26,6 +26,7 @@ export function getOperationParameter(openApi: OpenApi, parameter: OpenApiParame
         isReadOnly: false,
         isRequired: parameter.required === true,
         isNullable: parameter['x-nullable'] === true,
+        isReference: false,
         format: parameter.format,
         maximum: parameter.maximum,
         exclusiveMaximum: parameter.exclusiveMaximum,
@@ -53,6 +54,7 @@ export function getOperationParameter(openApi: OpenApi, parameter: OpenApiParame
         operationParameter.template = definitionRef.template;
         operationParameter.imports.push(...definitionRef.imports);
         operationParameter.default = getOperationParameterDefault(parameter, operationParameter);
+        operationParameter.isReference = true;
         return operationParameter;
     }
 
@@ -112,6 +114,7 @@ export function getOperationParameter(openApi: OpenApi, parameter: OpenApiParame
             operationParameter.template = model.template;
             operationParameter.imports.push(...model.imports);
             operationParameter.default = getOperationParameterDefault(parameter, operationParameter);
+            operationParameter.isReference = true;
             return operationParameter;
         } else {
             const model = getModel(openApi, parameter.schema);

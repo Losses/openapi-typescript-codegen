@@ -23,6 +23,7 @@ export function getOperationResponse(openApi: OpenApi, response: OpenApiResponse
         isReadOnly: false,
         isRequired: false,
         isNullable: false,
+        isReference: false,
         imports: [],
         enum: [],
         enums: [],
@@ -41,6 +42,7 @@ export function getOperationResponse(openApi: OpenApi, response: OpenApiResponse
             operationResponse.base = model.base;
             operationResponse.template = model.template;
             operationResponse.imports.push(...model.imports);
+            operationResponse.isReference = true;
             return operationResponse;
         } else {
             const model = getModel(openApi, response.schema);

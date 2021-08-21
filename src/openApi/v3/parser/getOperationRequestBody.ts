@@ -24,6 +24,7 @@ export function getOperationRequestBody(openApi: OpenApi, parameter: OpenApiRequ
         isReadOnly: false,
         isRequired: parameter.required === true,
         isNullable: parameter.nullable === true,
+        isReference: false,
         imports: [],
         enum: [],
         enums: [],
@@ -42,6 +43,7 @@ export function getOperationRequestBody(openApi: OpenApi, parameter: OpenApiRequ
                 requestBody.base = model.base;
                 requestBody.template = model.template;
                 requestBody.imports.push(...model.imports);
+                requestBody.isReference = true;
                 return requestBody;
             } else {
                 const model = getModel(openApi, schema);
@@ -68,6 +70,7 @@ export function getOperationRequestBody(openApi: OpenApi, parameter: OpenApiRequ
                 requestBody.minProperties = model.minProperties;
                 requestBody.pattern = getPattern(model.pattern);
                 requestBody.imports.push(...model.imports);
+                requestBody.isReference = model.isReference;
                 requestBody.enum.push(...model.enum);
                 requestBody.enums.push(...model.enums);
                 requestBody.properties.push(...model.properties);
