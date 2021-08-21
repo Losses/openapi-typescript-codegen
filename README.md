@@ -8,6 +8,8 @@
 
 This project is a fork of [openapi-typescript-codegen](https://github.com/ferdikoomen/openapi-typescript-codegen/), which:
 * Generates React hooks for OpenAPI specification, which is driven by [jotai](https://github.com/pmndrs/jotai);
+* Fixed many bugs in the schema generator, which could help us generate ajv-compliant JSON Schema;
+* Add client side type validation to enhance the robostness of your website;
 * Dropped the support of OpenAPI v2 and XHR mode.
 
 ## Install
