@@ -21,11 +21,11 @@ export class ValidationError extends Error {
 }
 
 function validateResponse(
-    url: string, 
-    responseBody: any, 
-    statusText: string, 
+    url: string,
+    responseBody: any,
+    statusText: string,
     schemas: Record<string, ValidateFunction>
-): boolean {
+): void {
     const validateFunction = schemas[statusText] || schemas['default'];
 
     if (!validateFunction) return;

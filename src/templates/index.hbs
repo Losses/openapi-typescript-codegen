@@ -28,11 +28,3 @@ export { ${{{name}}} } from './schemas/${{{name}}}';
 {{/each}}
 {{/if}}
 {{/if}}
-{{#if @root.exportServices}}
-{{#if services}}
-
-{{#each services}}
-export { {{{name}}} } from './services/{{{name}}}';
-{{/each}}
-{{/if}}
-{{/if}}
