@@ -28,3 +28,12 @@ export { ${{{name}}} } from './schemas/${{{name}}}';
 {{/each}}
 {{/if}}
 {{/if}}
+
+{{#if @root.exportServices}}
+{{#if services}}
+
+{{#each services}}
+export * from './services/{{{name}}}';
+{{/each}}
+{{/if}}
+{{/if}}
