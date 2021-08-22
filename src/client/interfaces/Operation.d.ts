@@ -13,5 +13,7 @@ export interface Operation extends OperationParameters {
     path: string;
     errors: OperationError[];
     results: OperationResponse[];
+    okResults: OperationResponse[];
+    errorResults: OperationResponse[];
     responseHeader: string | null;
 }

@@ -19,6 +19,7 @@ import { ${{{this}}} } from '../schemas/${{{this}}}';
 {{/if}}
 
 import { globalOptionsAtom, request as __request } from '../core/request';
+import type { ResultState, IActionCallback } from '../core/request';
 import { BaseApiRequestOptions, ApiRequestOptions } from '../core/ApiRequestOptions';
 import { ApiResult } from '../core/ApiResult';
 {{#if @root.useVersion}}
@@ -37,39 +38,62 @@ const {{{this}}}Validator = ajv.compile(${{{this}}});
 {{/if}}
 {{/if}}
 
-
-interface IResult {
-    loading: Boolean;
-    error: CommonErrorResponseApplicationJsonResponse | null;
-    data: {{#if imports}}{{#each imports}}{{{this}}}|{{/each}}{{/if}}Number|String|null|undefined|Array<any>;
-}
-
-interface IActionCallback {
-    (atom: IResult, set: (update: SetStateAction<IResult>) => void, result: ApiResult): void;
-}
-
 {{#each operations}}
+
+type {{{name}}}OkResult = 
+{{#each okResults}}
+  | {{{base}}}
+{{else}}
+  | void
+{{/each}};
+
+type {{{name}}}ErrorResult = 
+{{#each errorResults}}
+  | {{{base}}}
+{{else}}
+  | void
+{{/each}};
+
 interface I{{{name}}}Controller {
     fetchData: ({{>parameters}}
         options?: ApiRequestOptions,
-        cb?: IActionCallback,
-        setter?: (update: SetStateAction<IResult>) => void,
+        cb?: IActionCallback<
+            {{{name}}}OkResult, 
+            {{{name}}}ErrorResult
+        >,
+        setter?: (
+            update: SetStateAction<ResultState<
+                {{{name}}}OkResult, 
+                {{{name}}}ErrorResult
+            >>
+        ) => void,
     ) => void;
 };
 
-{{/each}}
-
-{{#each operations}}
-export function {{{hookName}}}():[IResult, I{{{name}}}Controller] {
-    const {{{name}}}ResultAtom = atom<IResult>({ loading: false, error: null, data: null });
-    const [resultAtom, setter] = useAtom({{{name}}}ResultAtom);
+export function {{{hookName}}}(): [
+    ResultState<
+        {{{name}}}OkResult, 
+        {{{name}}}ErrorResult
+    >, 
+    I{{{name}}}Controller
+] {
+    const {{{name}}}ResultAtom = atom<
+        ResultState<
+            {{{name}}}OkResult, 
+            {{{name}}}ErrorResult
+        >
+    >({ loading: false, error: null, data: null });
+    const [resultState, setter] = useAtom({{{name}}}ResultAtom);
     const fetchData = async ({{>parameters}}
         options?: ApiRequestOptions,
-        cb?: IActionCallback
+        cb?: IActionCallback<
+            {{{name}}}OkResult, 
+            {{{name}}}ErrorResult
+        >
     ) => {
-        setter({ ...resultAtom, loading: true })
+        setter({ error: resultState.error, data: resultState.data, loading: true });
         try {
-            const result = await __request({
+            const fetchResponse = await __request({
                 {{#if parametersCookie}}
                 cookies: {
                     {{#each parametersCookie}}
@@ -130,9 +154,9 @@ export function {{{hookName}}}():[IResult, I{{{name}}}Controller] {
                 path: `{{{path}}}`,
             });
             if(cb) {
-                cb.call(null, resultAtom, setter, result);
+                cb.call(null, resultState, setter, fetchResponse);
             } else {
-                const data = await result.body()
+                const data = await fetchResponse.body()
                 setter({ loading: false, error: null, data });
             }
         } catch (error) {
@@ -144,7 +168,7 @@ export function {{{hookName}}}():[IResult, I{{{name}}}Controller] {
         setter,
     };
     return [
-        resultAtom,
+        resultState,
         controller
     ];
 }

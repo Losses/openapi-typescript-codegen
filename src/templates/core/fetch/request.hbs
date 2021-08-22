@@ -11,7 +11,7 @@ import type { ApiResult } from './ApiResult';
 import { OpenAPI } from './OpenAPI';
 
 import merge from 'lodash.merge';
-import { atom, useAtom } from 'jotai';
+import { atom, useAtom, SetStateAction } from 'jotai';
 
 export const globalOptionsAtom = atom<BaseApiRequestOptions>({});
 
@@ -91,4 +91,35 @@ export async function request(options: ApiRequestOptions): Promise<ApiResult> {
 
     catchErrors(mergedOptions, result);
     return result;
+}
+
+export interface ILoadingState<DataType = void, ErrorType = void> {
+    loading: true;
+    error: ErrorType | null;
+    data: DataType | null;
+}
+
+export interface ISuccessState<DataType = void> {
+    loading: false;
+    error: null;
+    data: DataType;
+}
+
+export interface IFailedState<ErrorType = void> {
+    loading: false;
+    error: ErrorType;
+    data: null
+}
+
+export type ResultState<DataType = void, ErrorType = void> = 
+    | ILoadingState<DataType, ErrorType>
+    | ISuccessState<DataType> 
+    | IFailedState<ErrorType>
+
+export interface IActionCallback<DataType = void, ErrorType = void> {
+    (
+        atom: ResultState<DataType, ErrorType>, 
+        set: (update: SetStateAction<ResultState<DataType, ErrorType>>) => void, 
+        result: ApiResult
+    ): void;
 }

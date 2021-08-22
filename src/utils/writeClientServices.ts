@@ -22,7 +22,7 @@ export async function writeClientServices(services: Service[], templates: Templa
     for (const service of services) {
         const file = resolve(outputPath, `${service.name}.ts`);
         const useVersion = service.operations.some(operation => operation.path.includes(VERSION_TEMPLATE_STRING));
-        
+
         const templateResult = templates.exports.service({
             ...service,
             httpClient,

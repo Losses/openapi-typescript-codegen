@@ -43,6 +43,8 @@ export function getOperation(openApi: OpenApi, url: string, method: string, op: 
         imports: [],
         errors: [],
         results: [],
+        okResults: [],
+        errorResults: [],
         responseHeader: null,
     };
 
@@ -79,6 +81,12 @@ export function getOperation(openApi: OpenApi, url: string, method: string, op: 
         operationResults.forEach(operationResult => {
             operation.results.push(operationResult);
             operation.imports.push(...operationResult.imports);
+
+            if (operationResult.code === 200 && !operationResult.isDefault) {
+                operation.okResults.push(operationResult);
+            } else {
+                operation.errorResults.push(operationResult);
+            }
         });
     }
 
