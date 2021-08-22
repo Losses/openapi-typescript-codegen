@@ -69,15 +69,15 @@ export const globalOptionsAtom = atom<BaseApiRequestOptions>({});
  */
 export async function request(options: ApiRequestOptions): Promise<ApiResult> {
     const [globalOptions] = useAtom(globalOptionsAtom);
-    const mergeOptions = merge({}, [globalOptions, options]) as unknown as ApiRequestOptions;
-    const url = getUrl(mergeOptions);
-    const response = await sendRequest(mergeOptions, url);
+    const mergedOptions = merge({}, [globalOptions, options]) as unknown as ApiRequestOptions;
+    const url = getUrl(mergedOptions);
+    const response = await sendRequest(mergedOptions, url);
     const responseBody = await getResponseBody(response);
-    const responseHeader = getResponseHeader(response, mergeOptions.responseHeader);
+    const responseHeader = getResponseHeader(response, mergedOptions.responseHeader);
 
     {{#if runtimeValidation}}
-    if (mergeOptions.schemas) {
-        validateResponse(url, responseBody, response.statusText, mergeOptions.schemas);
+    if (mergedOptions.schemas) {
+        validateResponse(url, responseBody, response.statusText, mergedOptions.schemas);
     }
     {{/if}}
 
@@ -89,6 +89,6 @@ export async function request(options: ApiRequestOptions): Promise<ApiResult> {
         body: responseHeader || responseBody,
     };
 
-    catchErrors(mergeOptions, result);
+    catchErrors(mergedOptions, result);
     return result;
 }
