@@ -1,5 +1,7 @@
 {{>header}}
 
+import { atom, useAtom, SetStateAction } from 'jotai';
+
 {{#if runtimeValidation}}
 import Ajv from "ajv"
 {{/if}}
@@ -17,9 +19,8 @@ import { ${{{this}}} } from '../schemas/${{{this}}}';
 {{/if}}
 
 import { globalOptionsAtom, request as __request } from '../core/request';
-import { BaseApiRequestOptions, ApiRequestOptions } from 'api/core/ApiRequestOptions';
-import { ApiResult } from 'api/core/ApiResult';
-import { atom, useAtom, SetStateAction } from 'jotai';
+import { BaseApiRequestOptions, ApiRequestOptions } from '../core/ApiRequestOptions';
+import { ApiResult } from '../core/ApiResult';
 {{#if @root.useVersion}}
 import { OpenAPI } from '../core/OpenAPI';
 {{/if}}
