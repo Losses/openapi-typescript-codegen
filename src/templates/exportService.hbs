@@ -16,8 +16,8 @@ import { ${{{this}}} } from '../schemas/${{{this}}}';
 {{/if}}
 {{/if}}
 
-import { request as __request } from '../core/request';
-import { ApiRequestOptions } from 'api/core/ApiRequestOptions';
+import { globalOptionsAtom, request as __request } from '../core/request';
+import { BaseApiRequestOptions, ApiRequestOptions } from 'api/core/ApiRequestOptions';
 import { ApiResult } from 'api/core/ApiResult';
 import { atom, useAtom, SetStateAction } from 'jotai';
 {{#if @root.useVersion}}

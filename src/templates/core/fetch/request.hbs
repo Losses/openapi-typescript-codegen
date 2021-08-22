@@ -6,9 +6,14 @@ import betterAjvErrors from 'better-ajv-errors';
 {{/if}}
 
 import { ApiError } from './ApiError';
-import type { ApiRequestOptions } from './ApiRequestOptions';
+import type { BaseApiRequestOptions, ApiRequestOptions } from './ApiRequestOptions';
 import type { ApiResult } from './ApiResult';
 import { OpenAPI } from './OpenAPI';
+
+import merge from 'lodash.merge';
+import { atom, useAtom } from 'jotai';
+
+export const globalOptionsAtom = atom<BaseApiRequestOptions>({});
 
 {{>functions/isDefined}}
 
@@ -63,13 +68,17 @@ import { OpenAPI } from './OpenAPI';
  * @throws ApiError
  */
 export async function request(options: ApiRequestOptions): Promise<ApiResult> {
-    const url = getUrl(options);
-    const response = await sendRequest(options, url);
+    const [globalOptions] = useAtom(globalOptionsAtom);
+    const mergeOptions = merge({}, [globalOptions, options]) as unknown as ApiRequestOptions;
+    const url = getUrl(mergeOptions);
+    const response = await sendRequest(mergeOptions, url);
     const responseBody = await getResponseBody(response);
-    const responseHeader = getResponseHeader(response, options.responseHeader);
+    const responseHeader = getResponseHeader(response, mergeOptions.responseHeader);
 
     {{#if runtimeValidation}}
-    validateResponse(url, responseBody, response.statusText, options.schemas);
+    if (mergeOptions.schemas) {
+        validateResponse(url, responseBody, response.statusText, mergeOptions.schemas);
+    }
     {{/if}}
 
     const result: ApiResult = {
@@ -80,6 +89,6 @@ export async function request(options: ApiRequestOptions): Promise<ApiResult> {
         body: responseHeader || responseBody,
     };
 
-    catchErrors(options, result);
+    catchErrors(mergeOptions, result);
     return result;
 }
