@@ -103,15 +103,20 @@ roleController.fetchData(1, {}, (atom, set, result) => {
 **Credential**
 
 ```typescript
+
 import { useGetRole } from './api/services/AdminService';
+import { globalOptionsAtom } from 'api/core/request';
 
 const [role, roleController] = useGetRole();
+const [globalConfig, setGlobalConfig] = useAtom(globalOptionsAtom)
 
-roleController.fetchData(1, {
+setGlobalConfig({
     headers: {
         'Authorization': `Bearer ${localStorage.getItem('token')}`,
     },
 });
+
+roleController.fetchData(1);
 ```
 
 **Request body of a post request**
