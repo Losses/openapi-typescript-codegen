@@ -133,6 +133,22 @@ createRoleController.fetchData({
 });
 ```
 
+**Request header of a request**
+
+```typescript
+import { useGetRole } from './api/services/AdminService';
+
+const [role, roleController] = useGetRole();
+const [globalConfig, setGlobalConfig] = useAtom(globalOptionsAtom);
+
+roleController.fetchData(1, {
+    headers: {
+        'YourHeader': `YourValue`,
+        // ...
+    },
+});
+```
+
 **Infinite scrolling**
 
 ```typescript
@@ -142,7 +158,7 @@ const [role, roleController] = useGetRole();
 
 roleController.fetchData(1, {}, (atom, set, result) => {
     set({
-        ...atom, 
+        ...atom,
         data: atom.data.concat(result),
     })
 });
