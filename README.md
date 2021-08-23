@@ -138,7 +138,6 @@ createRoleController.fetchData({
 import { useGetRole } from './api';
 
 const [role, roleController] = useGetRole();
-const [globalConfig, setGlobalConfig] = useAtom(globalOptionsAtom);
 
 roleController.fetchData(1, {
     headers: {
