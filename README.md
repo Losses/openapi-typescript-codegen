@@ -78,7 +78,7 @@ OpenAPI.generate({
 **Basic usage**
 
 ```typescript
-import { useGetRole } from './api/services/AdminService';
+import { useGetRole } from './api';
 
 const [role, roleController] = useGetRole();
 
@@ -90,7 +90,7 @@ roleController.fetchData(1);
 Like setting `localStorage` after a login request.
 
 ```typescript
-import { useGetRole } from './api/services/AdminService';
+import { useGetRole } from './api';
 
 const [role, roleController] = useGetRole();
 
@@ -104,8 +104,7 @@ roleController.fetchData(1, {}, (atom, set, result) => {
 
 ```typescript
 
-import { useGetRole } from './api/services/AdminService';
-import { globalOptionsAtom } from 'api/core/request';
+import { useGetRole, globalOptionsAtom } from './api';
 
 const [role, roleController] = useGetRole();
 const [globalConfig, setGlobalConfig] = useAtom(globalOptionsAtom)
@@ -122,7 +121,7 @@ roleController.fetchData(1);
 **Request body of a post request**
 
 ```typescript
-import { useCreateRole } from './api/services/AdminService';
+import { useCreateRole } from './api';
 
 const [role, createRoleController] = useCreateRole();
 
@@ -136,7 +135,7 @@ createRoleController.fetchData({
 **Request header of a request**
 
 ```typescript
-import { useGetRole } from './api/services/AdminService';
+import { useGetRole } from './api';
 
 const [role, roleController] = useGetRole();
 const [globalConfig, setGlobalConfig] = useAtom(globalOptionsAtom);
@@ -152,7 +151,7 @@ roleController.fetchData(1, {
 **Infinite scrolling**
 
 ```typescript
-import { useGetRole } from './api/services/AdminService';
+import { useGetRole } from './api';
 
 const [role, roleController] = useGetRole();
 
