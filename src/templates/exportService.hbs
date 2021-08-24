@@ -29,7 +29,6 @@ import { OpenAPI } from '../core/OpenAPI';
 
 {{#if runtimeValidation}}
 const ajv = new Ajv();
-const addFormats = require("ajv-formats");
 addFormats(ajv, { mode: "fast" });
 {{/if}}
 
