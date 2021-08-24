@@ -2,7 +2,7 @@
 
 [![NPM][npm-image]][npm-url]
 [![License][license-image]][license-url]
-[![Build Status][travis-image]][travis-url]
+[![Node.js Package][action-image]][action-url]
 
 > Node.js library that generates React Hooks based on the OpenAPI specification.
 
@@ -185,9 +185,9 @@ module.exports = {
 };
 ```
 
-[npm-url]: https://npmjs.org/package/@jbcz/openapi-typescript-codegen
-[npm-image]: https://img.shields.io/npm/v/@jbcz/openapi-typescript-codegen.svg
+[npm-url]: https://npmjs.org/package/@jbcz/openapi-hooks-codegen
+[npm-image]: https://img.shields.io/npm/v/@jbcz/openapi-hooks-codegen.svg
 [license-url]: LICENSE
-[license-image]: http://img.shields.io/npm/l/@jbcz/openapi-typescript-codegen.svg
-[travis-url]: https://travis-ci.org/ferdikoomen/openapi-typescript-codegen
-[travis-image]: https://img.shields.io/travis/ferdikoomen/openapi-typescript-codegen.svg
+[license-image]: http://img.shields.io/npm/l/@jbcz/openapi-hooks-codegen.svg
+[action-url]: https://github.com/jibencaozuo-playground/openapi-hooks-codegen/actions/workflows/npm-publish.yml
+[action-image]: https://github.com/jibencaozuo-playground/openapi-hooks-codegen/actions/workflows/npm-publish.yml/badge.svg
