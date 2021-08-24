@@ -74,7 +74,3 @@ export async function request(options: ApiRequestOptions): Promise<ApiResult> {
     catchErrors(options, result);
     return result;
 }
-
-declare module 'better-ajv-errors/lib/modern' {
-    export * as default from 'better-ajv-errors';
-}
