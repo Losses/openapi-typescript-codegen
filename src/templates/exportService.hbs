@@ -3,7 +3,8 @@
 import { atom, useAtom, SetStateAction } from 'jotai';
 
 {{#if runtimeValidation}}
-import Ajv from "ajv"
+import Ajv from "ajv";
+import addFormats from "ajv-formats";
 {{/if}}
 
 {{#if imports}}
@@ -28,6 +29,8 @@ import { OpenAPI } from '../core/OpenAPI';
 
 {{#if runtimeValidation}}
 const ajv = new Ajv();
+const addFormats = require("ajv-formats");
+addFormats(ajv, { mode: "fast" });
 {{/if}}
 
 {{#if runtimeValidation}}
@@ -40,14 +43,14 @@ const {{{this}}}Validator = ajv.compile(${{{this}}});
 
 {{#each operations}}
 
-type {{{name}}}OkResult = 
+type {{{name}}}OkResult =
 {{#each okResults}}
   | {{{base}}}
 {{else}}
   | void
 {{/each}};
 
-type {{{name}}}ErrorResult = 
+type {{{name}}}ErrorResult =
 {{#each errorResults}}
   | {{{base}}}
 {{else}}
@@ -58,12 +61,12 @@ interface I{{{name}}}Controller {
     fetchData: ({{>parameters}}
         options?: ApiRequestOptions,
         cb?: IActionCallback<
-            {{{name}}}OkResult, 
+            {{{name}}}OkResult,
             {{{name}}}ErrorResult
         >,
         setter?: (
             update: SetStateAction<ResultState<
-                {{{name}}}OkResult, 
+                {{{name}}}OkResult,
                 {{{name}}}ErrorResult
             >>
         ) => void,
@@ -72,14 +75,14 @@ interface I{{{name}}}Controller {
 
 export function {{{hookName}}}(): [
     ResultState<
-        {{{name}}}OkResult, 
+        {{{name}}}OkResult,
         {{{name}}}ErrorResult
-    >, 
+    >,
     I{{{name}}}Controller
 ] {
     const {{{name}}}ResultAtom = atom<
         ResultState<
-            {{{name}}}OkResult, 
+            {{{name}}}OkResult,
             {{{name}}}ErrorResult
         >
     >({ loading: false, error: null, data: null });
@@ -87,7 +90,7 @@ export function {{{hookName}}}(): [
     const fetchData = async ({{>parameters}}
         options?: ApiRequestOptions,
         cb?: IActionCallback<
-            {{{name}}}OkResult, 
+            {{{name}}}OkResult,
             {{{name}}}ErrorResult
         >
     ) => {
