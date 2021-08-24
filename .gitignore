@@ -16,3 +16,12 @@ samples/generated
 samples/swagger-codegen-cli-v2.jar
 samples/swagger-codegen-cli-v3.jar
 experiment
+
+# Yarn v2
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
