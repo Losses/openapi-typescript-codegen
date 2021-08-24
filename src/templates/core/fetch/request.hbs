@@ -94,6 +94,12 @@ export async function request(options: ApiRequestOptions): Promise<ApiResult> {
     return result;
 }
 
+export interface INotReadyState {
+    loading: false;
+    error: null;
+    data: null;
+}
+
 export interface ILoadingState<DataType = void, ErrorType = void> {
     loading: true;
     error: ErrorType | null;
@@ -113,6 +119,7 @@ export interface IFailedState<ErrorType = void> {
 }
 
 export type ResultState<DataType = void, ErrorType = void> =
+    | INotReadyState
     | ILoadingState<DataType, ErrorType>
     | ISuccessState<DataType>
     | IFailedState<ErrorType>
