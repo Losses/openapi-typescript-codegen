@@ -10,11 +10,15 @@
     {{/each}}
 {{/if}}
     },
+    required: [
+        {{#each properties}}
+        {{#if isRequired}}
+        '{{{name}}}',
+        {{/if}}
+        {{/each}}
+    ],
 {{#if isReadOnly}}
     readOnly: {{{isReadOnly}}},
-{{/if}}
-{{#if isRequired}}
-    required: {{{isRequired}}},
 {{/if}}
 {{#if isNullable}}
     nullable: {{{isNullable}}},
