@@ -2,7 +2,8 @@
 
 {{#if runtimeValidation}}
 import type { ValidateFunction } from 'ajv';
-import betterAjvErrors from 'better-ajv-errors';
+// @ts-ignore
+import { default as betterAjvErrors } from 'better-ajv-errors/lib/modern';
 {{/if}}
 
 import { ApiError } from './ApiError';
@@ -93,6 +94,12 @@ export async function request(options: ApiRequestOptions): Promise<ApiResult> {
     return result;
 }
 
+export interface INotReadyState {
+    loading: false;
+    error: null;
+    data: null;
+}
+
 export interface ILoadingState<DataType = void, ErrorType = void> {
     loading: true;
     error: ErrorType | null;
@@ -111,15 +118,16 @@ export interface IFailedState<ErrorType = void> {
     data: null
 }
 
-export type ResultState<DataType = void, ErrorType = void> = 
+export type ResultState<DataType = void, ErrorType = void> =
+    | INotReadyState
     | ILoadingState<DataType, ErrorType>
-    | ISuccessState<DataType> 
+    | ISuccessState<DataType>
     | IFailedState<ErrorType>
 
 export interface IActionCallback<DataType = void, ErrorType = void> {
     (
-        atom: ResultState<DataType, ErrorType>, 
-        set: (update: SetStateAction<ResultState<DataType, ErrorType>>) => void, 
+        atom: ResultState<DataType, ErrorType>,
+        set: (update: SetStateAction<ResultState<DataType, ErrorType>>) => void,
         result: ApiResult
     ): void;
 }

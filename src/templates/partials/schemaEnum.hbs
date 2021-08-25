@@ -2,12 +2,12 @@
     type: '{{{base}}}',
     enum: [{{#each enum}}{{{value}}}{{#unless @last}}, {{/unless}}{{/each}}],
 {{#if isReadOnly}}
-    isReadOnly: {{{isReadOnly}}},
+    readonly: {{{isReadOnly}}},
 {{/if}}
 {{#if isRequired}}
-    isRequired: {{{isRequired}}},
+    required: {{{isRequired}}},
 {{/if}}
 {{#if isNullable}}
-    isNullable: {{{isNullable}}},
+    nullable: {{{isNullable}}},
 {{/if}}
 }

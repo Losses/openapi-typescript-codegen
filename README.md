@@ -2,7 +2,7 @@
 
 [![NPM][npm-image]][npm-url]
 [![License][license-image]][license-url]
-[![Build Status][travis-image]][travis-url]
+[![Node.js Package][action-image]][action-url]
 
 > Node.js library that generates React Hooks based on the OpenAPI specification.
 
@@ -18,6 +18,7 @@ This project is a fork of [openapi-typescript-codegen](https://github.com/ferdik
 npm install @jbcz/openapi-hooks-codegen --save-dev
 ```
 
+Notice: React Native users may need [`react-native-url-polyfill`](https://www.npmjs.com/package/react-native-url-polyfill) to get the support of baseUrl configuration, please checkout the documentation.
 
 ## Usage
 
@@ -50,12 +51,6 @@ $ openapi --help
 }
 ```
 
-**NPX**
-
-```
-npx openapi-typescript-codegen --input ./spec.json --output ./dist
-```
-
 **Node.js API**
 
 ```javascript
@@ -78,7 +73,7 @@ OpenAPI.generate({
 **Basic usage**
 
 ```typescript
-import { useGetRole } from './api/services/AdminService';
+import { useGetRole } from './api';
 
 const [role, roleController] = useGetRole();
 
@@ -90,7 +85,7 @@ roleController.fetchData(1);
 Like setting `localStorage` after a login request.
 
 ```typescript
-import { useGetRole } from './api/services/AdminService';
+import { useGetRole } from './api';
 
 const [role, roleController] = useGetRole();
 
@@ -104,8 +99,7 @@ roleController.fetchData(1, {}, (atom, set, result) => {
 
 ```typescript
 
-import { useGetRole } from './api/services/AdminService';
-import { globalOptionsAtom } from 'api/core/request';
+import { useGetRole, globalOptionsAtom } from './api';
 
 const [role, roleController] = useGetRole();
 const [globalConfig, setGlobalConfig] = useAtom(globalOptionsAtom)
@@ -122,7 +116,7 @@ roleController.fetchData(1);
 **Request body of a post request**
 
 ```typescript
-import { useCreateRole } from './api/services/AdminService';
+import { useCreateRole } from './api';
 
 const [role, createRoleController] = useCreateRole();
 
@@ -133,20 +127,87 @@ createRoleController.fetchData({
 });
 ```
 
+**Request header of a request**
+
+```typescript
+import { useGetRole } from './api';
+
+const [role, roleController] = useGetRole();
+
+roleController.fetchData(1, {
+    headers: {
+        'YourHeader': `YourValue`,
+        // ...
+    },
+});
+```
+
 **Infinite scrolling**
 
 ```typescript
-import { useGetRole } from './api/services/AdminService';
+import { useGetRole } from './api';
 
 const [role, roleController] = useGetRole();
 
 roleController.fetchData(1, {}, (atom, set, result) => {
     set({
-        ...atom, 
+        ...atom,
         data: atom.data.concat(result),
     })
 });
 ```
+
+## Project Setup
+
+If your team is using Gitea and want to automatically sync the spec with the repository,
+you can use the following project setup:
+
+1. Installing some dependencies:
+
+```
+yarn add -D npm-run-all dotenv-cli @jbcz/openapi-hooks-codegen
+```
+
+2. Creating a `.env.openapi` file in the root directory of your project, with the following
+   content:
+
+```
+GITEA_TOKEN=YOUR_SUPER_SECRET_TOKEN
+```
+
+3. Adding the following configuration to the `scripts` section of your `package.json` file:
+
+```
+"scripts": {
+    "sync-spec": "dotenv-cli -e /env.openapi openapi-sync-gitea --ref RELEASE_TAG --owner REPO_OWNER --repo REPO_ID --filePath --filePath FILE_PATH_IN_THE_REPO --host GITEA_HOST -o ./spec.yaml",
+    "gen-api": "openapi --input ./spec.yaml ./src/api/",
+    "postinstall": "npm-run-all sync-spec gen-api",
+},
+```
+
+4. Creating a `.gitkeep` file in the `./src/api/`.
+
+
+5. **IMPORTANT**: Add the following configuration to your `.gitignore` file:
+
+```
+/env.openapi
+/spec.yaml
+/src/api/
+!/src/api/.gitkeep
+```
+
+6. Edit `tsconfig.json` to add the following configuration:
+
+```
+{
+  "compilerOptions": {
+      "baseUrl": "src",
+  }
+}
+```
+
+7. Run `yarn postinstall` to generate the API.
 
 ****
 FAQ
@@ -171,9 +232,9 @@ module.exports = {
 };
 ```
 
-[npm-url]: https://npmjs.org/package/@jbcz/openapi-typescript-codegen
-[npm-image]: https://img.shields.io/npm/v/@jbcz/openapi-typescript-codegen.svg
+[npm-url]: https://npmjs.org/package/@jbcz/openapi-hooks-codegen
+[npm-image]: https://img.shields.io/npm/v/@jbcz/openapi-hooks-codegen.svg
 [license-url]: LICENSE
-[license-image]: http://img.shields.io/npm/l/@jbcz/openapi-typescript-codegen.svg
-[travis-url]: https://travis-ci.org/ferdikoomen/openapi-typescript-codegen
-[travis-image]: https://img.shields.io/travis/ferdikoomen/openapi-typescript-codegen.svg
+[license-image]: http://img.shields.io/npm/l/@jbcz/openapi-hooks-codegen.svg
+[action-url]: https://github.com/jibencaozuo-playground/openapi-hooks-codegen/actions/workflows/npm-publish.yml
+[action-image]: https://github.com/jibencaozuo-playground/openapi-hooks-codegen/actions/workflows/npm-publish.yml/badge.svg

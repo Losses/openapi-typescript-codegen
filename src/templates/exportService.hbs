@@ -42,14 +42,14 @@ const {{{this}}}Validator = ajv.compile(${{{this}}});
 
 {{#each operations}}
 
-type {{{name}}}OkResult = 
+type {{{name}}}OkResult =
 {{#each okResults}}
   | {{{base}}}
 {{else}}
   | void
 {{/each}};
 
-type {{{name}}}ErrorResult = 
+type {{{name}}}ErrorResult =
 {{#each errorResults}}
   | {{{base}}}
 {{else}}
@@ -65,12 +65,12 @@ interface I{{{name}}}Controller {
     fetchData: ({{>parameters}}
         options?: ApiRequestOptions,
         cb?: IActionCallback<
-            {{{name}}}OkResult, 
+            {{{name}}}OkResult,
             {{{name}}}ErrorResult
         >,
         setter?: (
             update: SetStateAction<ResultState<
-                {{{name}}}OkResult, 
+                {{{name}}}OkResult,
                 {{{name}}}ErrorResult
             >>
         ) => void,
@@ -87,16 +87,16 @@ const {{{name}}}ResultAtom = atom<
 
 export function {{{hookName}}}(): [
     ResultState<
-        {{{name}}}OkResult, 
+        {{{name}}}OkResult,
         {{{name}}}ErrorResult
-    >, 
+    >,
     I{{{name}}}Controller
 ] {
     const [resultState, setter] = useAtom({{{name}}}ResultAtom);
     const fetchData = async ({{>parameters}}
         options?: ApiRequestOptions,
         cb?: IActionCallback<
-            {{{name}}}OkResult, 
+            {{{name}}}OkResult,
             {{{name}}}ErrorResult
         >
     ):Promise<ApiResult> => {

@@ -6,13 +6,10 @@ ${{base}}
     type: '{{{base}}}',
 {{/if}}
 {{#if isReadOnly}}
-    isReadOnly: {{{isReadOnly}}},
-{{/if}}
-{{#if isRequired}}
-    isRequired: {{{isRequired}}},
+    readOnly: {{{isReadOnly}}},
 {{/if}}
 {{#if isNullable}}
-    isNullable: {{{isNullable}}},
+    nullable: {{{isNullable}}},
 {{/if}}
 {{#if format}}
     format: '{{{format}}}',

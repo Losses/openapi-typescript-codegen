@@ -1,6 +1,6 @@
 {
     "name": "@jbcz/openapi-hooks-codegen",
-    "version": "0.0.1",
+    "version": "0.0.3",
     "description": "Library that generates React Hooks based on the OpenAPI specification.",
     "author": "Ferdi Koomen",
     "homepage": "https://github.com/jibencaozuo-playground/openapi-hooks-codegen",
@@ -35,7 +35,8 @@
     "module": "dist/index.js",
     "types": "types/index.d.ts",
     "bin": {
-        "openapi": "bin/index.js"
+        "openapi": "bin/index.js",
+        "openapi-sync-gitea": "bin/index.js"
     },
     "files": [
         "bin/index.js",
@@ -63,6 +64,7 @@
     "dependencies": {
         "@types/lodash.merge": "^4.6.6",
         "ajv": "^8.6.2",
+        "ajv-formats": "^2.1.1",
         "better-ajv-errors": "^0.7.0",
         "camelcase": "^6.2.0",
         "commander": "^8.0.0",
