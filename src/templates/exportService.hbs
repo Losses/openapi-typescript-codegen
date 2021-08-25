@@ -3,7 +3,8 @@
 import { atom, useAtom, SetStateAction } from 'jotai';
 
 {{#if runtimeValidation}}
-import Ajv from "ajv"
+import Ajv from "ajv";
+import addFormats from "ajv-formats";
 {{/if}}
 
 {{#if imports}}
@@ -28,6 +29,7 @@ import { OpenAPI } from '../core/OpenAPI';
 
 {{#if runtimeValidation}}
 const ajv = new Ajv();
+addFormats(ajv, { mode: "fast" });
 {{/if}}
 
 {{#if runtimeValidation}}
@@ -54,6 +56,11 @@ type {{{name}}}ErrorResult =
   | void
 {{/each}};
 
+{{/each}};
+
+
+{{#each operations}}
+
 interface I{{{name}}}Controller {
     fetchData: ({{>parameters}}
         options?: ApiRequestOptions,
@@ -70,6 +77,14 @@ interface I{{{name}}}Controller {
     ) => void;
 };
 
+
+const {{{name}}}ResultAtom = atom<
+    ResultState<
+        {{{name}}}OkResult,
+        {{{name}}}ErrorResult
+    >
+>({ loading: false, error: null, data: null });
+
 export function {{{hookName}}}(): [
     ResultState<
         {{{name}}}OkResult, 
@@ -77,12 +92,6 @@ export function {{{hookName}}}(): [
     >, 
     I{{{name}}}Controller
 ] {
-    const {{{name}}}ResultAtom = atom<
-        ResultState<
-            {{{name}}}OkResult, 
-            {{{name}}}ErrorResult
-        >
-    >({ loading: false, error: null, data: null });
     const [resultState, setter] = useAtom({{{name}}}ResultAtom);
     const fetchData = async ({{>parameters}}
         options?: ApiRequestOptions,
@@ -90,78 +99,82 @@ export function {{{hookName}}}(): [
             {{{name}}}OkResult, 
             {{{name}}}ErrorResult
         >
-    ) => {
-        setter({ error: resultState.error, data: resultState.data, loading: true });
-        try {
-            const fetchResponse = await __request({
-                {{#if parametersCookie}}
-                cookies: {
-                    {{#each parametersCookie}}
-                    '{{{prop}}}': {{{name}}},
-                    {{/each}}
-                },
-                {{/if}}
-                {{#if parametersHeader}}
-                headers: {
-                    {{#each parametersHeader}}
-                    '{{{prop}}}': {{{name}}},
-                    {{/each}}
-                },
-                {{/if}}
-                {{#if parametersQuery}}
-                query: {
-                    {{#each parametersQuery}}
-                    '{{{prop}}}': {{{name}}},
-                    {{/each}}
-                },
-                {{/if}}
-                {{#if parametersForm}}
-                formData: {
-                    {{#each parametersForm}}
-                    '{{{prop}}}': {{{name}}},
-                    {{/each}}
-                },
-                {{/if}}
-                {{#if parametersBody}}
-                body: {{{parametersBody.name}}},
-                {{#if parametersBody.mediaType}}
-                mediaType: '{{{parametersBody.mediaType}}}',
-                {{/if}}
-                {{/if}}
-                {{#if responseHeader}}
-                responseHeader: '{{{responseHeader}}}',
-                {{/if}}
-                {{#if errors}}
-                errors: {
-                    {{#each errors}}
-                    {{{code}}}: `{{{description}}}`,
-                    {{/each}}
-                },
-                {{/if}}
-                schemas: {
-                    {{#each results}}
-                    {{#unless isAny}}
-                    {{#if isDefault}}
-                    'default': {{{type}}}Validator,
-                    {{else}}
-                    '{{{code}}}': {{{type}}}Validator,
+    ):Promise<ApiResult> => {
+        return new Promise(async (resolve, reject) => {
+            setter({ error: resultState.error, data: resultState.data, loading: true });
+            try {
+                const fetchResponse = await __request({
+                    {{#if parametersCookie}}
+                    cookies: {
+                        {{#each parametersCookie}}
+                        '{{{prop}}}': {{{name}}},
+                        {{/each}}
+                    },
                     {{/if}}
-                    {{/unless}}
-                    {{/each}}
-                },
-                ...options,
-                method: '{{{method}}}',
-                path: `{{{path}}}`,
-            });
-            if(cb) {
-                cb.call(null, resultState, setter, fetchResponse);
-            } else {
-                const data = await fetchResponse.body()
-                setter({ loading: false, error: null, data });
+                    {{#if parametersHeader}}
+                    headers: {
+                        {{#each parametersHeader}}
+                        '{{{prop}}}': {{{name}}},
+                        {{/each}}
+                    },
+                    {{/if}}
+                    {{#if parametersQuery}}
+                    query: {
+                        {{#each parametersQuery}}
+                        '{{{prop}}}': {{{name}}},
+                        {{/each}}
+                    },
+                    {{/if}}
+                    {{#if parametersForm}}
+                    formData: {
+                        {{#each parametersForm}}
+                        '{{{prop}}}': {{{name}}},
+                        {{/each}}
+                    },
+                    {{/if}}
+                    {{#if parametersBody}}
+                    body: {{{parametersBody.name}}},
+                    {{#if parametersBody.mediaType}}
+                    mediaType: '{{{parametersBody.mediaType}}}',
+                    {{/if}}
+                    {{/if}}
+                    {{#if responseHeader}}
+                    responseHeader: '{{{responseHeader}}}',
+                    {{/if}}
+                    {{#if errors}}
+                    errors: {
+                        {{#each errors}}
+                        {{{code}}}: `{{{description}}}`,
+                        {{/each}}
+                    },
+                    {{/if}}
+                    schemas: {
+                        {{#each results}}
+                        {{#unless isAny}}
+                        {{#if isDefault}}
+                        'default': {{{type}}}Validator,
+                        {{else}}
+                        '{{{code}}}': {{{type}}}Validator,
+                        {{/if}}
+                        {{/unless}}
+                        {{/each}}
+                    },
+                    ...options,
+                    method: '{{{method}}}',
+                    path: `{{{path}}}`,
+                });
+                if(cb) {
+                    cb.call(null, resultState, setter, fetchResponse);
+                } else {
+                    const data = await fetchResponse.body()
+                    setter({ loading: false, error: null, data });
+                }
+                resolve(fetchResponse);
+            } catch (error) {
+                setter({ loading: false, error, data: null });
+                reject(error);
             }
-        } catch (error) {
-            setter({ loading: false, error, data: null });
-        }
+        });
     };
     const controller = {
         fetchData,
