@@ -11,7 +11,6 @@ import type { BaseApiRequestOptions, ApiRequestOptions } from './ApiRequestOptio
 import type { ApiResult } from './ApiResult';
 import { OpenAPI } from './OpenAPI';
 
-import merge from 'lodash.merge';
 import { atom, useAtom, SetStateAction } from 'jotai';
 
 export const globalOptionsAtom = atom<BaseApiRequestOptions>({});
@@ -62,6 +61,8 @@ export const globalOptionsAtom = atom<BaseApiRequestOptions>({});
 {{/if}}
 
 
+const poorClone = <T>(x: T) => JSON.parse(JSON.stringify(x)) as T;
+
 /**
  * Request using fetch client
  * @param options The request options from the the service
@@ -72,7 +73,10 @@ export async function request(
     options: ApiRequestOptions,
     globalOptions: BaseApiRequestOptions
 ): Promise<ApiResult> {
-    const mergedOptions = merge({}, [globalOptions, options]) as unknown as ApiRequestOptions;
+    const mergedOptions = {} as unknown as ApiRequestOptions;
+    Object.assign(mergedOptions, poorClone(globalOptions));
+    Object.assign(mergedOptions, poorClone(options));
+
     const url = getUrl(mergedOptions);
     const response = await sendRequest(mergedOptions, url);
     const responseBody = await getResponseBody(response);
