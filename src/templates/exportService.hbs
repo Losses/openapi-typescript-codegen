@@ -96,7 +96,7 @@ export function {{{hookName}}}(): [
     const [globalOptions] = useAtom(globalOptionsAtom);
 
     const fetchData = useCallback(async ({{>parameters}}
-        options?: ApiRequestOptions,
+        options?: BaseApiRequestOptions,
         cb?: IActionCallback<
             {{{name}}}OkResult,
             {{{name}}}ErrorResult
