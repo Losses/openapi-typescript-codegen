@@ -82,11 +82,22 @@ export async function request(
     const responseBody = await getResponseBody(response);
     const responseHeader = getResponseHeader(response, mergedOptions.responseHeader);
 
+    let responseValid = true;
     {{#if runtimeValidation}}
     if (mergedOptions.schemas) {
-        validateResponse(url, responseBody, response.statusText, mergedOptions.schemas);
+        responseValid = validateResponse(url, responseBody, response.statusText, mergedOptions.schemas);
     }
     {{/if}}
+
+    if (!responseValid) {
+        return {
+            url,
+            ok: false,
+            status: -1,
+            statusText: 'Client side validation failed',
+            body: null,
+        }
+    }
 
     const result: ApiResult = {
         url,
@@ -96,36 +107,42 @@ export async function request(
         body: responseHeader || responseBody,
     };
 
-    catchErrors(mergedOptions, result);
     return result;
 }
 
-export interface INotReadyState {
-    loading: false;
-    error: null;
-    data: null;
+export enum RequestStatus {
+    NotReady = 'NotReady',
+    Loading = 'Loading',
+    Success = 'Success',
+    Error = 'Error',
+}
+
+export interface INotReadyState<DataType = void, ErrorType = void> {
+    status: RequestStatus.NotReady;
+    error: ErrorType | null;
+    data: DataType | null;
 }
 
 export interface ILoadingState<DataType = void, ErrorType = void> {
-    loading: true;
+    status: RequestStatus.Loading;
     error: ErrorType | null;
     data: DataType | null;
 }
 
 export interface ISuccessState<DataType = void> {
-    loading: false;
+    status: RequestStatus.Success;
     error: null;
     data: DataType;
 }
 
 export interface IFailedState<ErrorType = void> {
-    loading: false;
-    error: ErrorType;
+    status: RequestStatus.Error;
+    error: ErrorType | null;
     data: null
 }
 
 export type ResultState<DataType = void, ErrorType = void> =
-    | INotReadyState
+    | INotReadyState<DataType, ErrorType>
     | ILoadingState<DataType, ErrorType>
     | ISuccessState<DataType>
     | IFailedState<ErrorType>

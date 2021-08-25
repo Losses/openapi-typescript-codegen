@@ -1,31 +1,9 @@
-export class ValidationError extends Error {
-    name = 'ValidationError';
-
-    url: string;
-    schema: ValidateFunction['schema'];
-    responseBody: any;
-    errors: ValidateFunction['errors'];
-
-    constructor(
-        url: string, 
-        schema: ValidateFunction['schema'], 
-        responseBody: any,
-        errors: ValidateFunction['errors']
-    ) {
-        super(`${url} is not a valid response.` + '\r\n' + betterAjvErrors(schema, responseBody, errors));
-        this.url = url;
-        this.schema = schema;
-        this.responseBody = responseBody;
-        this.errors = errors;
-    }
-}
-
 function validateResponse(
     url: string,
     responseBody: any,
     statusText: string,
     schemas: Record<string, ValidateFunction>
-): void {
+): boolean {
     const validateFunction = schemas[statusText] || schemas['default'];
 
     if (!validateFunction) return;
@@ -33,6 +11,9 @@ function validateResponse(
     const valid = validateFunction(responseBody);
 
     if (!valid) {
-        throw new ValidationError(url, validateFunction.schema, responseBody, validateFunction.errors);
+        console.error(validateFunction.schema, responseBody, validateFunction.errors);
+        return false;
     }
+
+    return true;
 }

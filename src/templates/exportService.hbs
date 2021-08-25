@@ -1,5 +1,4 @@
 {{>header}}
-
 import { useCallback, useMemo } from 'react';
 import { atom, useAtom, SetStateAction } from 'jotai';
 
@@ -20,7 +19,7 @@ import { ${{{this}}} } from '../schemas/${{{this}}}';
 {{/if}}
 {{/if}}
 
-import { globalOptionsAtom, request as __request } from '../core/request';
+import { RequestStatus, globalOptionsAtom, request as __request } from '../core/request';
 import type { ResultState, IActionCallback } from '../core/request';
 import { BaseApiRequestOptions, ApiRequestOptions } from '../core/ApiRequestOptions';
 import { ApiResult } from '../core/ApiResult';
@@ -84,7 +83,7 @@ const {{{name}}}ResultAtom = atom<
         {{{name}}}OkResult,
         {{{name}}}ErrorResult
     >
->({ loading: false, error: null, data: null });
+>({ status: RequestStatus.NotReady, error: null, data: null });
 
 export function {{{hookName}}}(): [
     ResultState<
@@ -96,7 +95,7 @@ export function {{{hookName}}}(): [
     const [resultState, setter] = useAtom({{{name}}}ResultAtom);
     const [globalOptions] = useAtom(globalOptionsAtom);
 
-    const fetchData = async ({{>parameters}}
+    const fetchData = useCallback(async ({{>parameters}}
         options?: ApiRequestOptions,
         cb?: IActionCallback<
             {{{name}}}OkResult,
@@ -104,7 +103,7 @@ export function {{{hookName}}}(): [
         >
     ):Promise<ApiResult> => {
         return new Promise(async (resolve, reject) => {
-            setter({ error: resultState.error, data: resultState.data, loading: true });
+            setter({ error: resultState.error, data: resultState.data, status: RequestStatus.NotReady });
             try {
                 const fetchResponse = await __request({
                     {{#if parametersCookie}}
@@ -169,16 +168,22 @@ export function {{{hookName}}}(): [
                 if(cb) {
                     cb.call(null, resultState, setter, fetchResponse);
                 } else {
-                    const data = await fetchResponse.body()
-                    setter({ loading: false, error: null, data });
+                    const { body, status } = fetchResponse;
+
+                    if (status === -1) {
+                        setter({ status: RequestStatus.Error, error: null, data: null });
+                    } else if (status !== 200) {
+                        setter({ status: RequestStatus.Error, error: body, data: null });
+                    } else {
+                        setter({ status: RequestStatus.Success, error: null, data: body });
+                    }
                 }
                 resolve(fetchResponse);
             } catch (error) {
-                setter({ loading: false, error, data: null });
+                setter({ status: RequestStatus.Error, error: null, data: null });
                 reject(error);
             }
         });
-    };
     }, [resultState]);
     const controller = useMemo({
         fetchData,
