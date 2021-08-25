@@ -1,5 +1,6 @@
 {{>header}}
 
+import { useCallback, useMemo } from 'react';
 import { atom, useAtom, SetStateAction } from 'jotai';
 
 {{#if runtimeValidation}}
@@ -178,10 +179,11 @@ export function {{{hookName}}}(): [
             }
         });
     };
-    const controller = {
+    }, [resultState]);
+    const controller = useMemo({
         fetchData,
         setter,
-    };
+    }, [fetchData, setter]);
     return [
         resultState,
         controller
