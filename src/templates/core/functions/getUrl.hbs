@@ -1,6 +1,19 @@
+function resolveUrl(...paths: string[]){
+    if (!paths.length) {
+        throw new TypeError('Less than one path');
+    }
+
+    let currentUrl: URL | null = null;
+
+    for (let i = 0; i < paths.length; i++) {
+        currentUrl = new URL(paths[i], currentUrl ? currentUrl.href : location.href);
+    }
+
+    return currentUrl.href
+};
+
 function getUrl(options: ApiRequestOptions): string {
-    const path = options.path.replace(/[:]/g, '_');
-    const url = `${OpenAPI.BASE}${path}`;
+    const url = resolveUrl(OpenAPI.BASE, options.path);
 
     if (options.query) {
         return `${url}${getQueryString(options.query)}`;
