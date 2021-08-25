@@ -93,6 +93,8 @@ export function {{{hookName}}}(): [
     I{{{name}}}Controller
 ] {
     const [resultState, setter] = useAtom({{{name}}}ResultAtom);
+    const [globalOptions] = useAtom(globalOptionsAtom);
+
     const fetchData = async ({{>parameters}}
         options?: ApiRequestOptions,
         cb?: IActionCallback<
@@ -162,7 +164,7 @@ export function {{{hookName}}}(): [
                     ...options,
                     method: '{{{method}}}',
                     path: `{{{path}}}`,
-                });
+                }, globalOptions);
                 if(cb) {
                     cb.call(null, resultState, setter, fetchResponse);
                 } else {

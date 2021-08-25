@@ -68,8 +68,10 @@ export const globalOptionsAtom = atom<BaseApiRequestOptions>({});
  * @returns ApiResult
  * @throws ApiError
  */
-export async function request(options: ApiRequestOptions): Promise<ApiResult> {
-    const [globalOptions] = useAtom(globalOptionsAtom);
+export async function request(
+    options: ApiRequestOptions,
+    globalOptions: ApiRequestOptions
+): Promise<ApiResult> {
     const mergedOptions = merge({}, [globalOptions, options]) as unknown as ApiRequestOptions;
     const url = getUrl(mergedOptions);
     const response = await sendRequest(mergedOptions, url);
