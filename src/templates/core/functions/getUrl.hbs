@@ -9,7 +9,7 @@ function resolveUrl(...paths: string[]){
         currentUrl = new URL(paths[i], currentUrl ? currentUrl.href : location.href);
     }
 
-    return currentUrl.href
+    return currentUrl!.href
 };
 
 function getUrl(options: ApiRequestOptions): string {
