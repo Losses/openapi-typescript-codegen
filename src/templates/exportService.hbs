@@ -64,7 +64,7 @@ type {{{name}}}ErrorResult =
 
 interface I{{{name}}}Controller {
     fetchData: ({{>parameters}}
-        options?: ApiRequestOptions,
+        options?: BaseApiRequestOptions,
         cb?: IActionCallback<
             {{{name}}}OkResult,
             {{{name}}}ErrorResult
