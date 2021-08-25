@@ -61,23 +61,6 @@ type {{{name}}}ErrorResult =
 
 {{#each operations}}
 
-interface I{{{name}}}Controller {
-    fetchData: ({{>parameters}}
-        options?: BaseApiRequestOptions,
-        cb?: IActionCallback<
-            {{{name}}}OkResult,
-            {{{name}}}ErrorResult
-        >,
-        setter?: (
-            update: SetStateAction<ResultState<
-                {{{name}}}OkResult,
-                {{{name}}}ErrorResult
-            >>
-        ) => void,
-    ) => void;
-};
-
-
 const {{{name}}}ResultAtom = atom<
     ResultState<
         {{{name}}}OkResult,
@@ -85,13 +68,7 @@ const {{{name}}}ResultAtom = atom<
     >
 >({ status: RequestStatus.NotReady, error: null, data: null });
 
-export function {{{hookName}}}(): [
-    ResultState<
-        {{{name}}}OkResult,
-        {{{name}}}ErrorResult
-    >,
-    I{{{name}}}Controller
-] {
+export function {{{hookName}}}() {
     const [resultState, setter] = useAtom({{{name}}}ResultAtom);
     const [globalOptions] = useAtom(globalOptionsAtom);
 
@@ -101,11 +78,17 @@ export function {{{hookName}}}(): [
             {{{name}}}OkResult,
             {{{name}}}ErrorResult
         >
-    ):Promise<ApiResult> => {
+    ):Promise<
+        ApiResult<{{{name}}}OkResult, true> |
+        ApiResult<{{{name}}}ErrorResult | null, false>
+    > => {
         return new Promise(async (resolve, reject) => {
             setter({ error: resultState.error, data: resultState.data, status: RequestStatus.NotReady });
             try {
-                const fetchResponse = await __request({
+                const fetchResponse = await __request<
+                    {{{name}}}OkResult,
+                    {{{name}}}ErrorResult | null
+                >({
                     {{#if parametersCookie}}
                     cookies: {
                         {{#each parametersCookie}}
@@ -168,14 +151,13 @@ export function {{{hookName}}}(): [
                 if(cb) {
                     cb.call(null, resultState, setter, fetchResponse);
                 } else {
-                    const { body, status } = fetchResponse;
-
-                    if (status === -1) {
+                    if (fetchResponse.status === -1) {
                         setter({ status: RequestStatus.Error, error: null, data: null });
-                    } else if (status !== 200) {
-                        setter({ status: RequestStatus.Error, error: body, data: null });
+                    } else if (!fetchResponse.ok) {
+                        fetchResponse
+                        setter({ status: RequestStatus.Error, error: fetchResponse.body as {{{name}}}ErrorResult | null, data: null });
                     } else {
-                        setter({ status: RequestStatus.Success, error: null, data: body });
+                        setter({ status: RequestStatus.Success, error: null, data: fetchResponse.body });
                     }
                 }
                 resolve(fetchResponse);
@@ -192,7 +174,7 @@ export function {{{hookName}}}(): [
     return [
         resultState,
         controller
-    ];
+    ] as const;
 }
 
 {{/each}}

@@ -69,10 +69,10 @@ const poorClone = <T>(x: T) => JSON.parse(JSON.stringify(x)) as T;
  * @returns ApiResult
  * @throws ApiError
  */
-export async function request(
+export async function request<DataType, ErrorType>(
     options: ApiRequestOptions,
     globalOptions: BaseApiRequestOptions
-): Promise<ApiResult> {
+): Promise<ApiResult<DataType, true> | ApiResult<ErrorType | null, false>> {
     const mergedOptions = {} as unknown as ApiRequestOptions;
     Object.assign(mergedOptions, poorClone(globalOptions));
     Object.assign(mergedOptions, poorClone(options));
@@ -99,15 +99,13 @@ export async function request(
         }
     }
 
-    const result: ApiResult = {
+    return {
         url,
         ok: response.ok,
         status: response.status,
         statusText: response.statusText,
         body: responseHeader || responseBody,
     };
-
-    return result;
 }
 
 export enum RequestStatus {
