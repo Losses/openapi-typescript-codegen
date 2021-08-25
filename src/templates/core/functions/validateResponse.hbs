@@ -6,7 +6,7 @@ function validateResponse(
 ): boolean {
     const validateFunction = schemas[statusText] || schemas['default'];
 
-    if (!validateFunction) return;
+    if (!validateFunction) return true;
 
     const valid = validateFunction(responseBody);
 
