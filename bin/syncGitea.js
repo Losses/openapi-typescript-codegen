@@ -15,7 +15,7 @@ const params = program
     .version(pkg.version)
     .requiredOption('-o, --output <value>', 'Output directory (required)')
     .option('--host <value>', 'URL of your Gitea instance')
-    .option('--token <value>', 'User token of your Gitea account')
+    .option('--token <value>', 'User token of your Gitea account', process.env.GITEA_TOKEN)
     .option('--owner <value>', 'Owner of the repo')
     .option('--repo <value>', 'Name of the repo')
     .option('--filePath <value>', 'Path of the dir, file, symlink or submodule in the repo')
