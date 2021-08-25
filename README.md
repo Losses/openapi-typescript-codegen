@@ -18,6 +18,7 @@ This project is a fork of [openapi-typescript-codegen](https://github.com/ferdik
 npm install @jbcz/openapi-hooks-codegen --save-dev
 ```
 
+Notice: React Native users may need [`react-native-url-polyfill`](https://www.npmjs.com/package/react-native-url-polyfill) to get the support of baseUrl configuration, please checkout the documentation.
 
 ## Usage
 
@@ -156,7 +157,7 @@ roleController.fetchData(1, {}, (atom, set, result) => {
 });
 ```
 
-### Project Setup
+## Project Setup
 
 If your team is using Gitea and want to automatically sync the spec with the repository,
 you can use the following project setup:
