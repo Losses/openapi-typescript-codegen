@@ -50,12 +50,6 @@ $ openapi --help
 }
 ```
 
-**NPX**
-
-```
-npx openapi-typescript-codegen --input ./spec.json --output ./dist
-```
-
 **Node.js API**
 
 ```javascript
@@ -161,6 +155,58 @@ roleController.fetchData(1, {}, (atom, set, result) => {
     })
 });
 ```
+
+### Project Setup
+
+If your team is using Gitea and want to automatically sync the spec with the repository,
+you can use the following project setup:
+
+1. Installing some dependencies:
+
+```
+yarn add -D npm-run-all dotenv-cli @jbcz/openapi-hooks-codegen
+```
+
+2. Creating a `.env.openapi` file in the root directory of your project, with the following
+   content:
+
+```
+GITEA_TOKEN=YOUR_SUPER_SECRET_TOKEN
+```
+
+3. Adding the following configuration to the `scripts` section of your `package.json` file:
+
+```
+"scripts": {
+    "sync-spec": "dotenv-cli -e /env.openapi openapi-sync-gitea --ref RELEASE_TAG --owner REPO_OWNER --repo REPO_ID --filePath --filePath FILE_PATH_IN_THE_REPO --host GITEA_HOST -o ./spec.yaml",
+    "gen-api": "openapi --input ./spec.yaml ./src/api/",
+    "postinstall": "npm-run-all sync-spec gen-api",
+},
+```
+
+4. Creating a `.gitkeep` file in the `./src/api/`.
+
+
+5. **IMPORTANT**: Add the following configuration to your `.gitignore` file:
+
+```
+/env.openapi
+/spec.yaml
+/src/api/
+!/src/api/.gitkeep
+```
+
+6. Edit `tsconfig.json` to add the following configuration:
+
+```
+{
+  "compilerOptions": {
+      "baseUrl": "src",
+  }
+}
+```
+
+7. Run `yarn postinstall` to generate the API.
 
 ****
 FAQ
