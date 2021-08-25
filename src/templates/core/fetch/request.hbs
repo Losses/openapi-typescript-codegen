@@ -70,7 +70,7 @@ export const globalOptionsAtom = atom<BaseApiRequestOptions>({});
  */
 export async function request(
     options: ApiRequestOptions,
-    globalOptions: ApiRequestOptions
+    globalOptions: BaseApiRequestOptions
 ): Promise<ApiResult> {
     const mergedOptions = merge({}, [globalOptions, options]) as unknown as ApiRequestOptions;
     const url = getUrl(mergedOptions);
