@@ -185,10 +185,10 @@ export function {{{hookName}}}(): [
             }
         });
     }, [resultState]);
-    const controller = useMemo({
+    const controller = useMemo(() => ({
         fetchData,
         setter,
-    }, [fetchData, setter]);
+    }), [fetchData, setter]);
     return [
         resultState,
         controller
