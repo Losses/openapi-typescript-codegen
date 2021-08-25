@@ -149,6 +149,6 @@ export interface IActionCallback<DataType = void, ErrorType = void> {
     (
         atom: ResultState<DataType, ErrorType>,
         set: (update: SetStateAction<ResultState<DataType, ErrorType>>) => void,
-        result: ApiResult
+        result: ApiResult<DataType, true> | ApiResult<ErrorType | null, false>
     ): void;
 }
