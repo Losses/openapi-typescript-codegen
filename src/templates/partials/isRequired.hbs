@@ -1,5 +1,5 @@
 {{~#if @root.useOptions~}}
-{{#unless isRequired}}?{{else if default}}?{{/unless}}
+{{#unless isRequired}}?{{else if default includeZero=true}}?{{/unless}}
 {{~else~}}
-{{#if isRequired}}{{#if default}}?{{/if}}{{else}}?{{/if}}
+{{#if isRequired}}{{#if default includeZero=true}}?{{/if}}{{else}}?{{/if}}
 {{~/if~}}
