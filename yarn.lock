@@ -1478,7 +1478,7 @@ __metadata:
     typescript: 4.3.5
   bin:
     openapi: bin/index.js
-    openapi-sync-gitea: bin/index.js
+    openapi-sync-gitea: bin/syncGitea.js
   languageName: unknown
   linkType: soft
 
