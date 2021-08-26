@@ -36,10 +36,11 @@
     "types": "types/index.d.ts",
     "bin": {
         "openapi": "bin/index.js",
-        "openapi-sync-gitea": "bin/index.js"
+        "openapi-sync-gitea": "bin/syncGitea.js"
     },
     "files": [
         "bin/index.js",
+        "bin/syncGitea.js",
         "dist/index.js",
         "types/index.d.ts"
     ],
