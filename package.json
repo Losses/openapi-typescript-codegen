@@ -36,10 +36,11 @@
     "types": "types/index.d.ts",
     "bin": {
         "openapi": "bin/index.js",
-        "openapi-sync-gitea": "bin/index.js"
+        "openapi-sync-gitea": "bin/syncGitea.js"
     },
     "files": [
         "bin/index.js",
+        "bin/syncGitea.js",
         "dist/index.js",
         "types/index.d.ts"
     ],
@@ -100,10 +101,12 @@
         "glob": "7.1.7",
         "jest": "27.0.6",
         "jest-cli": "26.6.3",
+        "jotai": "^1.3.0",
         "node-fetch": "2.6.1",
         "prettier": "2.3.2",
         "puppeteer": "10.1.0",
         "qs": "6.10.1",
+        "react": "^17.0.2",
         "rollup": "2.55.1",
         "rollup-plugin-terser": "7.0.2",
         "rollup-plugin-typescript2": "0.30.0",
