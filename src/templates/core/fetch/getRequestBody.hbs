@@ -1,3 +1,5 @@
+type BodyInit = Blob | BufferSource | FormData | URLSearchParams | ReadableStream<Uint8Array> | string;
+
 function getRequestBody(options: ApiRequestOptions): BodyInit | undefined {
     if (options.formData) {
         return getFormData(options.formData);
