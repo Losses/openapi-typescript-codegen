@@ -4,9 +4,11 @@ function resolveUrl(...paths: string[]){
     }
 
     let currentUrl: URL | null = null;
+    const __location = (globalThis as any).location;
+    const baseUrl = __location ? __location.href : OpenAPI.BASE;
 
     for (let i = 0; i < paths.length; i++) {
-        currentUrl = new URL(paths[i], currentUrl ? currentUrl.href : location.href);
+        currentUrl = new URL(paths[i], currentUrl ? currentUrl.href : baseUrl);
     }
 
     return currentUrl!.href
