@@ -10,7 +10,8 @@ This project is a fork of [openapi-typescript-codegen](https://github.com/ferdik
 * Generates React hooks for OpenAPI specification, which is driven by [jotai](https://github.com/pmndrs/jotai);
 * Fixed many bugs in the schema generator, which could help us generate ajv-compliant JSON Schema;
 * Add client side type validation to enhance the robostness of your website;
-* Dropped the support of OpenAPI v2 and XHR mode.
+* Dropped the support of OpenAPI v2 and XHR mode;
+* Support React Native.
 
 ## Install
 
@@ -180,7 +181,7 @@ GITEA_TOKEN=YOUR_SUPER_SECRET_TOKEN
 ```
 "scripts": {
     "sync-spec": "dotenv-cli -e /env.openapi openapi-sync-gitea --ref RELEASE_TAG --owner REPO_OWNER --repo REPO_ID --filePath --filePath FILE_PATH_IN_THE_REPO --host GITEA_HOST -o ./spec.yaml",
-    "gen-api": "openapi --input ./spec.yaml ./src/api/",
+    "gen-api": "openapi --input ./spec.yaml --output ./src/api/",
     "postinstall": "npm-run-all sync-spec gen-api",
 },
 ```
