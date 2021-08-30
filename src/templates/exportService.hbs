@@ -61,7 +61,7 @@ type {{{name}}}ErrorResult =
 
 {{#each operations}}
 
-const {{{name}}}ResultAtom = atom<
+export const {{{name}}}ResultAtom = atom<
     ResultState<
         {{{name}}}OkResult,
         {{{name}}}ErrorResult
