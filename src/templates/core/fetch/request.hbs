@@ -139,6 +139,8 @@ export interface IFailedState<ErrorType = void> {
     data: null
 }
 
+export type ResultType<T> = T extends () => readonly [infer R, any] ? R : never
+
 export type ResultState<DataType = void, ErrorType = void> =
     | INotReadyState<DataType, ErrorType>
     | ILoadingState<DataType, ErrorType>
