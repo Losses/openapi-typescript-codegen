@@ -154,7 +154,6 @@ export function {{{hookName}}}() {
                     if (fetchResponse.status === -1) {
                         setter({ status: RequestStatus.Error, error: null, data: null });
                     } else if (!fetchResponse.ok) {
-                        fetchResponse
                         setter({ status: RequestStatus.Error, error: fetchResponse.body as {{{name}}}ErrorResult | null, data: null });
                     } else {
                         setter({ status: RequestStatus.Success, error: null, data: fetchResponse.body });
