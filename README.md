@@ -180,7 +180,7 @@ GITEA_TOKEN=YOUR_SUPER_SECRET_TOKEN
 
 ```
 "scripts": {
-    "sync-spec": "dotenv-cli -e /env.openapi openapi-sync-gitea --ref RELEASE_TAG --owner REPO_OWNER --repo REPO_ID --filePath --filePath FILE_PATH_IN_THE_REPO --host GITEA_HOST -o ./spec.yaml",
+    "sync-spec": "dotenv -e /env.openapi -- openapi-sync-gitea --ref RELEASE_TAG --owner REPO_OWNER --repo REPO_ID --filePath FILE_PATH_IN_THE_REPO --host GITEA_HOST -o ./spec.yaml",
     "gen-api": "openapi --input ./spec.yaml --output ./src/api/",
     "postinstall": "npm-run-all sync-spec gen-api",
 },
