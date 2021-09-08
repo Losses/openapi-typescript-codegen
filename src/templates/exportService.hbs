@@ -139,6 +139,7 @@ export function {{{hookName}}}() {
                     },
                     {{/if}}
                     schemas: {
+                        {{#if runtimeValidation}}
                         {{#each results}}
                         {{#unless isAny}}
                         {{#if isDefault}}
@@ -148,6 +149,7 @@ export function {{{hookName}}}() {
                         {{/if}}
                         {{/unless}}
                         {{/each}}
+                        {{/if}}
                     },
                     ...options,
                     method: '{{{method}}}',
