@@ -175,7 +175,7 @@ export function {{{hookName}}}() {
                 reject(error);
             }
         });
-    }, [setter]);
+    }, [setter, globalOptions]);
 
     const reset = useCallback((resetAll: boolean) => {
         setter((resultState) => ({
