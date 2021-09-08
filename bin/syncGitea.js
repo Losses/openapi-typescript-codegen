@@ -19,7 +19,7 @@ const params = program
     .option('--owner <value>', 'Owner of the repo')
     .option('--repo <value>', 'Name of the repo')
     .option('--filePath <value>', 'Path of the dir, file, symlink or submodule in the repo')
-    .option('--ref <value>', 'The name of the commit/branch/tag. Default the repository’s default branch (usually master)')
+    .option('--ref <value>', 'The name of the commit/branch/tag. Default the repository’s default branch (usually master)', process.env.OPENAPI_SYNC_REF)
     .option('--exportSchemas <value>', 'Write schemas to disk', true)
     .option('--responseSchemaAsModel <value>', 'Convert response component to schema', true)
     .option('--runtimeValidation <value>', 'Check if check data type from service side is valid while fetching the data', true)
