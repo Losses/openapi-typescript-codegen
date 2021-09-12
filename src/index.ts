@@ -1,5 +1,4 @@
 import { HttpClient } from './HttpClient';
-import { parse as parseV2 } from './openApi/v2';
 import { parse as parseV3 } from './openApi/v3';
 import { getOpenApiSpec } from './utils/getOpenApiSpec';
 import { getOpenApiVersion, OpenApiVersion } from './utils/getOpenApiVersion';
@@ -69,11 +68,7 @@ export async function generate({
 
     switch (openApiVersion) {
         case OpenApiVersion.V2: {
-            const client = parseV2(openApi);
-            const clientFinal = postProcessClient(client);
-            if (!write) break;
-            await writeClient(clientFinal, templates, output, httpClient, useOptions, useUnionTypes, exportCore, exportServices, exportModels, exportSchemas, responseSchemaAsModel, request);
-            break;
+            throw new Error('OpenAPI V2 is not supported.');
         }
 
         case OpenApiVersion.V3: {
