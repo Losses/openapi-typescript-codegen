@@ -9,9 +9,9 @@
 This project is a fork of [openapi-typescript-codegen](https://github.com/ferdikoomen/openapi-typescript-codegen/), which:
 * Generates React hooks for OpenAPI specification, which is driven by [jotai](https://github.com/pmndrs/jotai);
 * Fixed many bugs in the schema generator, which could help us generate ajv-compliant JSON Schema;
-* Add client side type validation to enhance the robostness of your website;
+* Add client-side type validation to enhance the robustness of your website;
 * Dropped the support of OpenAPI v2 and XHR mode;
-* Support React Native.
+* Supports React Native.
 
 ## Install
 
@@ -19,7 +19,7 @@ This project is a fork of [openapi-typescript-codegen](https://github.com/ferdik
 npm install @jbcz/openapi-hooks-codegen --save-dev
 ```
 
-Notice: React Native users may need [`react-native-url-polyfill`](https://www.npmjs.com/package/react-native-url-polyfill) to get the support of baseUrl configuration, please checkout the documentation.
+Notice: React Native users may need [`react-native-url-polyfill`](https://www.npmjs.com/package/react-native-url-polyfill) to get the support of baseUrl configuration, please check out the documentation.
 
 ## Usage
 
@@ -215,7 +215,7 @@ FAQ
 ===
 
 ### Babel support
-If you use enums inside your models / definitions then those enums are by default inside a namespace with the same name
+If you use enums inside your models/definitions then those enums are by default inside a namespace with the same name
 as your model. This is called declaration merging. However, the [@babel/plugin-transform-typescript](https://babeljs.io/docs/en/babel-plugin-transform-typescript)
 does not support these namespaces, so if you are using babel in your project please use the `--useUnionTypes` flag
 to generate union types instead of traditional enums. More info can be found here: [Enums vs. Union Types](#enums-vs-union-types---useuniontypes).
