@@ -74,6 +74,7 @@
         "json-schema-ref-parser": "^9.0.7",
         "lodash.merge": "^4.6.2",
         "mkdirp": "^1.0.4",
+        "prettier": "2.4.0",
         "rimraf": "^3.0.2"
     },
     "devDependencies": {
@@ -102,7 +103,6 @@
         "jest": "27.0.6",
         "jest-cli": "26.6.3",
         "node-fetch": "2.6.1",
-        "prettier": "2.3.2",
         "puppeteer": "10.1.0",
         "qs": "6.10.1",
         "rollup": "2.55.1",
