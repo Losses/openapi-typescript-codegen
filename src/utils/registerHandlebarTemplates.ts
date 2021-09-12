@@ -38,7 +38,9 @@ import xhrRequest from '../templates/core/xhr/request.hbs';
 import xhrSendRequest from '../templates/core/xhr/sendRequest.hbs';
 import templateExportModel from '../templates/exportModel.hbs';
 import templateExportSchema from '../templates/exportSchema.hbs';
+import templateExportSchemaCjs from '../templates/exportSchemaCjs.hbs';
 import templateExportService from '../templates/exportService.hbs';
+import templateValidatorGenerator from '../templates/exportValidatorGenerator.hbs';
 import templateIndex from '../templates/index.hbs';
 import partialBase from '../templates/partials/base.hbs';
 import partialExportComposition from '../templates/partials/exportComposition.hbs';
@@ -69,12 +71,17 @@ import partialTypeReference from '../templates/partials/typeReference.hbs';
 import partialTypeUnion from '../templates/partials/typeUnion.hbs';
 import { registerHandlebarHelpers } from './registerHandlebarHelpers';
 
+// @ts-ignore
+Handlebars.logger.level = 'info'
+
 export interface Templates {
     index: Handlebars.TemplateDelegate;
     exports: {
         model: Handlebars.TemplateDelegate;
         schema: Handlebars.TemplateDelegate;
+        schemaCjs: Handlebars.TemplateDelegate;
         service: Handlebars.TemplateDelegate;
+        validatorGenerator: Handlebars.TemplateDelegate;
     };
     core: {
         settings: Handlebars.TemplateDelegate;
@@ -98,7 +105,9 @@ export function registerHandlebarTemplates(root: { httpClient: HttpClient; useOp
         exports: {
             model: Handlebars.template(templateExportModel),
             schema: Handlebars.template(templateExportSchema),
+            schemaCjs: Handlebars.template(templateExportSchemaCjs),
             service: Handlebars.template(templateExportService),
+            validatorGenerator: Handlebars.template(templateValidatorGenerator),
         },
         core: {
             settings: Handlebars.template(templateCoreSettings),

@@ -13,9 +13,15 @@ import type { {{{this}}} } from '../models/{{{this}}}';
 {{/each}}
 
 {{#if runtimeValidation}}
+{{#if precompileValidator}}
+{{#each imports}}
+import { $${{{this}}} } from '../validators/$${{{this}}}';
+{{/each}}
+{{else}}
 {{#each imports}}
 import { ${{{this}}} } from '../schemas/${{{this}}}';
 {{/each}}
+{{/if}}
 {{/if}}
 {{/if}}
 
@@ -34,9 +40,11 @@ addFormats(ajv, { mode: "fast" });
 
 {{#if runtimeValidation}}
 {{#if imports}}
+{{#unless precompileValidator}}
 {{#each imports}}
-const {{{this}}}Validator = ajv.compile(${{{this}}});
+const $${{{this}}} = ajv.compile(${{{this}}});
 {{/each}}
+{{/unless}}
 {{/if}}
 {{/if}}
 
@@ -139,14 +147,16 @@ export function {{{hookName}}}() {
                     },
                     {{/if}}
                     schemas: {
-                        {{#if runtimeValidation}}
+                        {{#if ../runtimeValidation}}
                         {{#each results}}
                         {{#unless isAny}}
+                        {{#notEquals type 'any'}}
                         {{#if isDefault}}
-                        'default': {{{type}}}Validator,
+                        'default': $${{{type}}},
                         {{else}}
-                        '{{{code}}}': {{{type}}}Validator,
+                        '{{{code}}}': $${{{type}}},
                         {{/if}}
+                        {{/notEquals}}
                         {{/unless}}
                         {{/each}}
                         {{/if}}

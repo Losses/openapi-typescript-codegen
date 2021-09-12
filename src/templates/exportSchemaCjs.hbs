@@ -1,0 +1,9 @@
+{{>header}}
+
+{{#if imports}}
+{{#each imports}}
+const { ${{{this}}} } = require('./${{{this}}}.js');
+{{/each}}
+{{/if}}
+
+module.exports.${{{name}}} = {{>schema}};

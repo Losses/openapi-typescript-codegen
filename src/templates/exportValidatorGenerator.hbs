@@ -1,0 +1,32 @@
+{{>header}}
+
+const { writeFileSync } = require('fs');
+const { EOL } = require('os');
+
+const Ajv = require('ajv');
+const addFormats = require('ajv-formats');
+const prettier = require('prettier/standalone');
+const parserTypeScript = require('prettier/parser-typescript');
+
+const ajv = new Ajv();
+addFormats(ajv, { mode: "fast" });
+
+
+{{#each models}}
+(() => {
+    const { ${{{name}}} } = require('./${{{name}}}');
+    const validator = ajv.compile(${{{name}}}).toString();
+    const script = 'export const $${{{name}}} = ' + validator;
+
+    writeFileSync('./$${{{name}}}.js', prettier.format(script, {
+        parser: "typescript",
+        plugins: [parserTypeScript],
+    }));
+
+    writeFileSync('./$${{{name}}}.d.ts', [
+        'import { ValidateFunction } from "ajv";',
+        'export const $${{{name}}}: ValidateFunction<unknown>;'
+    ].join(EOL));
+})();
+
+{{/each}}
