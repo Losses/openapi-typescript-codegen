@@ -151,11 +151,13 @@ export function {{{hookName}}}() {
                         {{#each results}}
                         {{#unless isAny}}
                         {{#notEquals type 'any'}}
+                        {{#notEquals type 'void'}}
                         {{#if isDefault}}
                         'default': $${{{type}}},
                         {{else}}
                         '{{{code}}}': $${{{type}}},
                         {{/if}}
+                        {{/notEquals}}
                         {{/notEquals}}
                         {{/unless}}
                         {{/each}}
