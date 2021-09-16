@@ -1,5 +1,4 @@
 import { HttpClient } from './HttpClient';
-import { parse as parseV2 } from './openApi/v2';
 import { parse as parseV3 } from './openApi/v3';
 import { getOpenApiSpec } from './utils/getOpenApiSpec';
 import { getOpenApiVersion, OpenApiVersion } from './utils/getOpenApiVersion';
@@ -22,6 +21,7 @@ export type Options = {
     exportSchemas?: boolean;
     responseSchemaAsModel?: boolean,
     runtimeValidation?: boolean,
+    precompileValidator?: boolean,
     request?: string;
     write?: boolean;
 };
@@ -41,6 +41,7 @@ export type Options = {
  * @param exportSchemas: Generate schemas
  * @param responseSchemaAsModel: Convert responses to schemas
  * @param runtimeValidation: Check if check data type from service side is valid while fetching the data
+ * @param precompileValidator: Compile AJV valitor to string or not
  * @param request: Path to custom request file
  * @param write Write the files to disk (true or false)
  */
@@ -56,6 +57,7 @@ export async function generate({
     exportSchemas = false,
     responseSchemaAsModel = true,
     runtimeValidation = true,
+    precompileValidator = false,
     request,
     write = true,
 }: Options): Promise<void> {
@@ -69,18 +71,14 @@ export async function generate({
 
     switch (openApiVersion) {
         case OpenApiVersion.V2: {
-            const client = parseV2(openApi);
-            const clientFinal = postProcessClient(client);
-            if (!write) break;
-            await writeClient(clientFinal, templates, output, httpClient, useOptions, useUnionTypes, exportCore, exportServices, exportModels, exportSchemas, responseSchemaAsModel, request);
-            break;
+            throw new Error('OpenAPI V2 is not supported.');
         }
 
         case OpenApiVersion.V3: {
             let client = parseV3(openApi, responseSchemaAsModel);
             client = postProcessClient(client);
             if (!write) break;
-            await writeClient(client, templates, output, httpClient, useOptions, useUnionTypes, exportCore, exportServices, exportModels, exportSchemas, runtimeValidation, request);
+            await writeClient(client, templates, output, httpClient, useOptions, useUnionTypes, exportCore, exportServices, exportModels, exportSchemas, runtimeValidation, precompileValidator, request);
             break;
         }
     }

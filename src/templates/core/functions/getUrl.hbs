@@ -15,7 +15,7 @@ function resolveUrl(...paths: string[]){
 };
 
 function getUrl(options: ApiRequestOptions): string {
-    const url = resolveUrl(OpenAPI.BASE, options.path);
+    const url = `${OpenAPI.BASE}${options.path}`;
 
     if (options.query) {
         return `${url}${getQueryString(options.query)}`;

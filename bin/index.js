@@ -21,6 +21,7 @@ const params = program
     .option('--exportSchemas <value>', 'Write schemas to disk', true)
     .option('--responseSchemaAsModel <value>', 'Convert response component to schema', true)
     .option('--runtimeValidation <value>', 'Check if check data type from service side is valid while fetching the data', true)
+    .option('--precompileValidator <value>', 'Precompile AJV validator to JavaScript files, this will significantly increase the amount of generated code', false)
     .option('--request <value>', 'Path to custom request file')
     .parse(process.argv)
     .opts();
@@ -40,6 +41,7 @@ if (OpenAPI) {
         exportSchemas: JSON.parse(params.exportModels) === true,
         responseSchemaAsModel: JSON.parse(params.responseSchemaAsModel) === true,
         runtimeValidation: JSON.parse(params.runtimeValidation) === true,
+        precompileValidator: JSON.parse(params.precompileValidator) === true,
         request: params.request,
     })
         .then(() => {

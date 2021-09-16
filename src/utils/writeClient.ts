@@ -9,6 +9,7 @@ import { writeClientCore } from './writeClientCore';
 import { writeClientIndex } from './writeClientIndex';
 import { writeClientModels } from './writeClientModels';
 import { writeClientSchemas } from './writeClientSchemas';
+import { writeClientValidators } from './writeClientValidators';
 import { writeClientServices } from './writeClientServices';
 
 /**
@@ -24,6 +25,7 @@ import { writeClientServices } from './writeClientServices';
  * @param exportModels: Generate models
  * @param exportSchemas: Generate schemas
  * @param runtimeValidation: Check if check data type from service side is valid while fetching the data
+ * @param precompileValidator: Compile AJV valitor to string or not
  * @param request: Path to custom request file
  */
 export async function writeClient(
@@ -38,11 +40,13 @@ export async function writeClient(
     exportModels: boolean,
     exportSchemas: boolean,
     runtimeValidation: boolean,
+    precompileValidator: boolean,
     request?: string
 ): Promise<void> {
     const outputPath = resolve(process.cwd(), output);
     const outputPathCore = resolve(outputPath, 'core');
     const outputPathModels = resolve(outputPath, 'models');
+    const outputPathValidator = resolve(outputPath, 'validators');
     const outputPathSchemas = resolve(outputPath, 'schemas');
     const outputPathServices = resolve(outputPath, 'services');
 
@@ -59,13 +63,19 @@ export async function writeClient(
     if (exportServices) {
         await rmdir(outputPathServices);
         await mkdir(outputPathServices);
-        await writeClientServices(client.services, templates, outputPathServices, httpClient, useUnionTypes, useOptions, runtimeValidation);
+        await writeClientServices(client.services, templates, outputPathServices, httpClient, useUnionTypes, useOptions, runtimeValidation, precompileValidator);
     }
 
     if (exportSchemas) {
         await rmdir(outputPathSchemas);
         await mkdir(outputPathSchemas);
         await writeClientSchemas(client.models, templates, outputPathSchemas, httpClient, useUnionTypes);
+    }
+    
+    if (precompileValidator) {
+        await rmdir(outputPathValidator);
+        await mkdir(outputPathValidator);
+        await writeClientValidators(client.models, templates, outputPathValidator, httpClient, useUnionTypes);
     }
 
     if (exportModels) {
