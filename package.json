@@ -1,6 +1,6 @@
 {
     "name": "@jbcz/openapi-hooks-codegen",
-    "version": "0.0.25",
+    "version": "0.0.26",
     "description": "Library that generates React Hooks based on the OpenAPI specification.",
     "author": "Ferdi Koomen",
     "homepage": "https://github.com/jibencaozuo-playground/openapi-hooks-codegen",
