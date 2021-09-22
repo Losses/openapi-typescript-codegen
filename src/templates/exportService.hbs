@@ -2,6 +2,10 @@
 import { useCallback, useMemo } from 'react';
 import { atom, useAtom, SetStateAction } from 'jotai';
 
+{{#if throwOnRequestFailed}}
+import { ApiError } from '../core/ApiError';
+{{/if}}
+
 {{#if runtimeValidation}}
 import Ajv from "ajv";
 import addFormats from "ajv-formats";
@@ -183,10 +187,21 @@ export function {{{hookName}}}() {
                 } else {
                     setter(resultState);
                 }
+
+                {{#if ../throwOnRequestFailed}}
+                if (resultState.status === RequestStatus.Success) {
+                    resolve(fetchResponse);
+                } else if (resultState.status === requestStatus.Error) {
+                    reject(new ApiError(fetchResponse, 'Failed to fetch'));
+                }
+                {{else}}
                 resolve(fetchResponse);
+                {{/if}}
             } catch (error) {
                 setter({ status: RequestStatus.Error, error: null, data: null });
+                {{#if ../throwOnRequestFailed}}
                 reject(error);
+                {{/if}}
             }
         });
     }, [setter, globalOptions]);
