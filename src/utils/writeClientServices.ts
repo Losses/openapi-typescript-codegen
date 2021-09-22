@@ -19,7 +19,7 @@ export async function writeClientServices(
     services: Service[],
     templates: Templates,
     outputPath: string,
-    { httpClient, useUnionTypes, useOptions, runtimeValidation, precompileValidator }: RequiredOptions
+    { httpClient, useUnionTypes, useOptions, runtimeValidation, precompileValidator, throwOnRequestFailed }: RequiredOptions
 ): Promise<void> {
     for (const service of services) {
         const file = resolve(outputPath, `${service.name}.ts`);
@@ -33,6 +33,7 @@ export async function writeClientServices(
             useOptions,
             runtimeValidation,
             precompileValidator,
+            throwOnRequestFailed,
         });
         await writeFile(file, format(templateResult));
     }
