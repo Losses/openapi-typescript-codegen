@@ -9,7 +9,7 @@ import { writeClient } from './utils/writeClient';
 
 export { HttpClient } from './HttpClient';
 
-export type Options = {
+export interface Options {
     input: string | Record<string, any>;
     output: string;
     httpClient?: HttpClient;
@@ -19,11 +19,32 @@ export type Options = {
     exportServices?: boolean;
     exportModels?: boolean;
     exportSchemas?: boolean;
-    responseSchemaAsModel?: boolean,
-    runtimeValidation?: boolean,
-    precompileValidator?: boolean,
+    responseSchemaAsModel?: boolean;
+    runtimeValidation?: boolean;
+    precompileValidator?: boolean;
+    throwOnRequestFailed?: boolean;
     request?: string;
     write?: boolean;
+}
+
+export type RequiredOptions = Required<Options>;
+
+const DEFAULT_PARAMETERS = {
+    input: '',
+    output: '',
+    httpClient: HttpClient.FETCH,
+    useOptions: false,
+    useUnionTypes: false,
+    exportCore: true,
+    exportServices: true,
+    exportModels: true,
+    exportSchemas: false,
+    responseSchemaAsModel: true,
+    runtimeValidation: true,
+    precompileValidator: false,
+    throwOnRequestFailed: false,
+    request: '',
+    write: true,
 };
 
 /**
@@ -45,29 +66,17 @@ export type Options = {
  * @param request: Path to custom request file
  * @param write Write the files to disk (true or false)
  */
-export async function generate({
-    input,
-    output,
-    httpClient = HttpClient.FETCH,
-    useOptions = false,
-    useUnionTypes = false,
-    exportCore = true,
-    exportServices = true,
-    exportModels = true,
-    exportSchemas = false,
-    responseSchemaAsModel = true,
-    runtimeValidation = true,
-    precompileValidator = false,
-    request,
-    write = true,
-}: Options): Promise<void> {
-    const openApi = isString(input) ? await getOpenApiSpec(input) : input;
-    const openApiVersion = getOpenApiVersion(openApi);
-    const templates = registerHandlebarTemplates({
-        httpClient,
-        useUnionTypes,
-        useOptions,
+export async function generate(options: Options): Promise<void> {
+    const mergedOptions = {} as unknown as RequiredOptions;
+
+    Object.keys(DEFAULT_PARAMETERS).forEach((_key: string) => {
+        const key = _key as keyof RequiredOptions;
+        Reflect.set(mergedOptions, key, options[key] ?? DEFAULT_PARAMETERS[key]);
     });
+
+    const openApi = isString(options.input) ? await getOpenApiSpec(options.input) : options.input;
+    const openApiVersion = getOpenApiVersion(openApi);
+    const templates = registerHandlebarTemplates(mergedOptions);
 
     switch (openApiVersion) {
         case OpenApiVersion.V2: {
@@ -75,10 +84,10 @@ export async function generate({
         }
 
         case OpenApiVersion.V3: {
-            let client = parseV3(openApi, responseSchemaAsModel);
+            let client = parseV3(openApi, mergedOptions.responseSchemaAsModel);
             client = postProcessClient(client);
-            if (!write) break;
-            await writeClient(client, templates, output, httpClient, useOptions, useUnionTypes, exportCore, exportServices, exportModels, exportSchemas, runtimeValidation, precompileValidator, request);
+            if (!mergedOptions.write) break;
+            await writeClient(client, templates, mergedOptions);
             break;
         }
     }

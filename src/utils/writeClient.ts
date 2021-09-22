@@ -1,7 +1,8 @@
 import { resolve } from 'path';
 
+import { RequiredOptions } from '../index';
+
 import type { Client } from '../client/interfaces/Client';
-import { HttpClient } from '../HttpClient';
 import { mkdir, rmdir } from './fileSystem';
 import { isSubDirectory } from './isSubdirectory';
 import { Templates } from './registerHandlebarTemplates';
@@ -16,76 +17,51 @@ import { writeClientServices } from './writeClientServices';
  * Write our OpenAPI client, using the given templates at the given output
  * @param client Client object with all the models, services, etc.
  * @param templates Templates wrapper with all loaded Handlebars templates
- * @param output The relative location of the output directory
- * @param httpClient The selected httpClient (fetch, xhr or node)
- * @param useOptions Use options or arguments functions
- * @param useUnionTypes Use union types instead of enums
- * @param exportCore: Generate core client classes
- * @param exportServices: Generate services
- * @param exportModels: Generate models
- * @param exportSchemas: Generate schemas
- * @param runtimeValidation: Check if check data type from service side is valid while fetching the data
- * @param precompileValidator: Compile AJV valitor to string or not
- * @param request: Path to custom request file
  */
-export async function writeClient(
-    client: Client,
-    templates: Templates,
-    output: string,
-    httpClient: HttpClient,
-    useOptions: boolean,
-    useUnionTypes: boolean,
-    exportCore: boolean,
-    exportServices: boolean,
-    exportModels: boolean,
-    exportSchemas: boolean,
-    runtimeValidation: boolean,
-    precompileValidator: boolean,
-    request?: string
-): Promise<void> {
-    const outputPath = resolve(process.cwd(), output);
+export async function writeClient(client: Client, templates: Templates, options: RequiredOptions): Promise<void> {
+    const outputPath = resolve(process.cwd(), options.output);
     const outputPathCore = resolve(outputPath, 'core');
     const outputPathModels = resolve(outputPath, 'models');
     const outputPathValidator = resolve(outputPath, 'validators');
     const outputPathSchemas = resolve(outputPath, 'schemas');
     const outputPathServices = resolve(outputPath, 'services');
 
-    if (!isSubDirectory(process.cwd(), output)) {
+    if (!isSubDirectory(process.cwd(), options.output)) {
         throw new Error(`Output folder is not a subdirectory of the current working directory`);
     }
 
-    if (exportCore) {
+    if (options.exportCore) {
         await rmdir(outputPathCore);
         await mkdir(outputPathCore);
-        await writeClientCore(client, templates, outputPathCore, httpClient, runtimeValidation, request);
+        await writeClientCore(client, templates, outputPathCore, options);
     }
 
-    if (exportServices) {
+    if (options.exportServices) {
         await rmdir(outputPathServices);
         await mkdir(outputPathServices);
-        await writeClientServices(client.services, templates, outputPathServices, httpClient, useUnionTypes, useOptions, runtimeValidation, precompileValidator);
+        await writeClientServices(client.services, templates, outputPathServices, options);
     }
 
-    if (exportSchemas) {
+    if (options.exportSchemas) {
         await rmdir(outputPathSchemas);
         await mkdir(outputPathSchemas);
-        await writeClientSchemas(client.models, templates, outputPathSchemas, httpClient, useUnionTypes);
+        await writeClientSchemas(client.models, templates, outputPathSchemas, options);
     }
-    
-    if (precompileValidator) {
+
+    if (options.precompileValidator) {
         await rmdir(outputPathValidator);
         await mkdir(outputPathValidator);
-        await writeClientValidators(client.models, templates, outputPathValidator, httpClient, useUnionTypes);
+        await writeClientValidators(client.models, templates, outputPathValidator, options);
     }
 
-    if (exportModels) {
+    if (options.exportModels) {
         await rmdir(outputPathModels);
         await mkdir(outputPathModels);
-        await writeClientModels(client.models, templates, outputPathModels, httpClient, useUnionTypes);
+        await writeClientModels(client.models, templates, outputPathModels, options);
     }
 
-    if (exportCore || exportServices || exportSchemas || exportModels) {
+    if (options.exportCore || options.exportServices || options.exportSchemas || options.exportModels) {
         await mkdir(outputPath);
-        await writeClientIndex(client, templates, outputPath, useUnionTypes, exportCore, exportServices, exportModels, exportSchemas);
+        await writeClientIndex(client, templates, outputPath, options);
     }
 }

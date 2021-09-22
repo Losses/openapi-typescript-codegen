@@ -1,5 +1,7 @@
 import * as Handlebars from 'handlebars/runtime';
 
+import type { RequiredOptions } from '../index';
+
 import { HttpClient } from '../HttpClient';
 import templateCoreApiError from '../templates/core/ApiError.hbs';
 import templateCoreApiRequestOptions from '../templates/core/ApiRequestOptions.hbs';
@@ -96,7 +98,7 @@ export interface Templates {
  * Read all the Handlebar templates that we need and return on wrapper object
  * so we can easily access the templates in out generator / write functions.
  */
-export function registerHandlebarTemplates(root: { httpClient: HttpClient; useOptions: boolean; useUnionTypes: boolean }): Templates {
+export function registerHandlebarTemplates(root: RequiredOptions): Templates {
     registerHandlebarHelpers(root);
 
     // Main templates (entry points for the files we write to disk)
