@@ -23,6 +23,7 @@ const params = program
     .option('--runtimeValidation <value>', 'Check if check data type from service side is valid while fetching the data', true)
     .option('--precompileValidator <value>', 'Precompile AJV validator to JavaScript files, this will significantly increase the amount of generated code', false)
     .option('--throwOnRequestFailed <value>', 'Throw an error while fetch failed', false)
+    .option('--verboseHttpLog <value>', 'Dump all detailed request log to your console', process.env.VERBOSE_HTTP_LOG)
     .option('--request <value>', 'Path to custom request file')
     .parse(process.argv)
     .opts();
@@ -44,6 +45,7 @@ if (OpenAPI) {
         runtimeValidation: JSON.parse(params.runtimeValidation) === true,
         precompileValidator: JSON.parse(params.precompileValidator) === true,
         throwOnRequestFailed: JSON.parse(params.throwOnRequestFailed) === true,
+        verboseHttpLog: JSON.parse(params.verboseHttpLog) === true,
         request: params.request,
     })
         .then(() => {

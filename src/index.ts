@@ -25,6 +25,7 @@ export interface Options {
     throwOnRequestFailed?: boolean;
     request?: string;
     write?: boolean;
+    verboseHttpLog?: boolean;
 }
 
 export type RequiredOptions = Required<Options>;
@@ -45,6 +46,7 @@ const DEFAULT_PARAMETERS = {
     throwOnRequestFailed: false,
     request: '',
     write: true,
+    verboseHttpLog: false,
 };
 
 /**

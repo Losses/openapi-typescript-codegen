@@ -91,7 +91,7 @@ export function {{{hookName}}}() {
             {{{name}}}ErrorResult
         >
     ):Promise<
-        ApiResult<{{{name}}}OkResult, true> 
+        ApiResult<{{{name}}}OkResult, true>
         {{#unless ../throwOnRequestFailed}}
         | ApiResult<{{{name}}}ErrorResult | null, false>
         {{/unless}}
@@ -174,6 +174,10 @@ export function {{{hookName}}}() {
                     path: `{{{path}}}`,
                 }, globalOptions);
 
+                {{#if ../verboseHttpLog}}
+                console.info('[OHC] `{{{name}}}` response:', fetchResponse)
+                {{/if}}
+
                 let resultState: ResultState<{{{name}}}OkResult, {{{name}}}ErrorResult>;
 
                 if (fetchResponse.status === -1) {
@@ -184,6 +188,10 @@ export function {{{hookName}}}() {
                     resultState = { status: RequestStatus.Success, error: null, data: fetchResponse.body };
                 }
 
+                {{#if ../verboseHttpLog}}
+                console.info('[OHC] `{{{name}}}` state:', resultState)
+                {{/if}}
+
                 if(cb) {
                     cb.call(null, resultState, setter, fetchResponse);
                 } else {
@@ -191,8 +199,11 @@ export function {{{hookName}}}() {
                 }
 
                 {{#if ../throwOnRequestFailed}}
+                {{#if ../verboseHttpLog}}
+                console.info('[OHC] `{{{name}}}` state compare: resultState.status', resultState.status, 'compared to: ', RequestStatus.Success, 'diff: ', resultState.status === RequestStatus.Success)
+                {{/if}}
                 if (resultState.status === RequestStatus.Success) {
-                    resolve(fetchResponse);
+                    resolve(fetchResponse as ApiResult<{{{name}}}OkResult, true>);
                 } else {
                     reject(new ApiError<{{{name}}}ErrorResult | null, false>(
                         fetchResponse as ApiResult<{{{name}}}ErrorResult | null, false>,
