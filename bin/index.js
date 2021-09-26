@@ -23,7 +23,7 @@ const params = program
     .option('--runtimeValidation <value>', 'Check if check data type from service side is valid while fetching the data', true)
     .option('--precompileValidator <value>', 'Precompile AJV validator to JavaScript files, this will significantly increase the amount of generated code', false)
     .option('--throwOnRequestFailed <value>', 'Throw an error while fetch failed', false)
-    .option('--verboseHttpLog <value>', 'Dump all detailed request log to your console', process.env.VERBOSE_HTTP_LOG)
+    .option('--verboseHttpLog <value>', 'Dump all detailed request log to your console', process.env.VERBOSE_HTTP_LOG || 'false')
     .option('--request <value>', 'Path to custom request file')
     .parse(process.argv)
     .opts();
