@@ -191,7 +191,7 @@ export function {{{hookName}}}() {
                 {{#if ../throwOnRequestFailed}}
                 if (resultState.status === RequestStatus.Success) {
                     resolve(fetchResponse);
-                } else if (resultState.status === RequestStatus.Error) {
+                } else {
                     reject(new ApiError<{{{name}}}ErrorResult | null, false>(
                         fetchResponse as ApiResult<{{{name}}}ErrorResult | null, false>,
                         'Failed to fetch'
