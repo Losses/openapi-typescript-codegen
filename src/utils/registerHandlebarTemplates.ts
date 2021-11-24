@@ -1,8 +1,6 @@
 import * as Handlebars from 'handlebars/runtime';
 
 import type { RequiredOptions } from '../index';
-
-import { HttpClient } from '../HttpClient';
 import templateCoreApiError from '../templates/core/ApiError.hbs';
 import templateCoreApiRequestOptions from '../templates/core/ApiRequestOptions.hbs';
 import templateCoreApiResult from '../templates/core/ApiResult.hbs';
@@ -74,7 +72,7 @@ import partialTypeUnion from '../templates/partials/typeUnion.hbs';
 import { registerHandlebarHelpers } from './registerHandlebarHelpers';
 
 // @ts-ignore
-Handlebars.logger.level = 'info'
+Handlebars.logger.level = 'info';
 
 export interface Templates {
     index: Handlebars.TemplateDelegate;

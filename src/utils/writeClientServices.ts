@@ -1,8 +1,7 @@
 import { resolve } from 'path';
 
-import { RequiredOptions } from '../index';
-
 import type { Service } from '../client/interfaces/Service';
+import { RequiredOptions } from '../index';
 import { writeFile } from './fileSystem';
 import { format } from './format';
 import { Templates } from './registerHandlebarTemplates';

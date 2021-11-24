@@ -1,8 +1,7 @@
 import { resolve } from 'path';
 
-import { RequiredOptions } from '../index';
-
 import type { Client } from '../client/interfaces/Client';
+import { RequiredOptions } from '../index';
 import { mkdir, rmdir } from './fileSystem';
 import { isSubDirectory } from './isSubdirectory';
 import { Templates } from './registerHandlebarTemplates';
@@ -10,8 +9,8 @@ import { writeClientCore } from './writeClientCore';
 import { writeClientIndex } from './writeClientIndex';
 import { writeClientModels } from './writeClientModels';
 import { writeClientSchemas } from './writeClientSchemas';
-import { writeClientValidators } from './writeClientValidators';
 import { writeClientServices } from './writeClientServices';
+import { writeClientValidators } from './writeClientValidators';
 
 /**
  * Write our OpenAPI client, using the given templates at the given output
