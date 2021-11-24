@@ -1492,6 +1492,7 @@ __metadata:
   bin:
     openapi: bin/index.js
     openapi-sync-gitea: bin/syncGitea.js
+    openapi-sync-github: bin/syncGitHub.js
   languageName: unknown
   linkType: soft
 
