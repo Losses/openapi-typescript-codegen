@@ -16,14 +16,14 @@ import type { {{{this}}} } from '../models/{{{this}}}';
 
 export type {{{name}}}OkResult =
 {{#each okResults}}
-  | {{{base}}}
+  | {{>type this}}
 {{else}}
   | void
 {{/each}};
 
 export type {{{name}}}ErrorResult =
 {{#each errorResults}}
-  | {{{base}}}
+  | {{>type this}}
 {{else}}
   | void
 {{/each}};
