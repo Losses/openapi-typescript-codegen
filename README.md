@@ -160,8 +160,8 @@ roleController.fetchData(1, {}, (atom, set, result) => {
 
 ## Project Setup
 
-If your team is using Gitea and want to automatically sync the spec with the repository,
-you can use the following project setup:
+If your team is using Gitea / GitHub and want to automatically sync the spec with the 
+repository, you can use the following project setup:
 
 1. Installing some dependencies:
 
@@ -174,7 +174,12 @@ yarn add -D npm-run-all dotenv-cli @jbcz/openapi-hooks-codegen
 
 ```
 GITEA_TOKEN=YOUR_SUPER_SECRET_TOKEN
+GITHUB_TOKEN=YOUR_SUPER_SECRET_TOKEN
 ```
+
+You can get your token from:
+* Gitea: https://[GITEA_INSTANCE_URL]/user/settings/applications
+* GitHub: https://github.com/settings/tokens
 
 3. Adding the following configuration to the `scripts` section of your `package.json` file:
 
@@ -185,6 +190,10 @@ GITEA_TOKEN=YOUR_SUPER_SECRET_TOKEN
     "postinstall": "npm-run-all sync-spec gen-api",
 },
 ```
+
+`openapi-sync-gitea` could be replaced to `openapi-sync-github`, in case you are using
+self hosted GitHub for Enterprise, the `--host` can be customized, and default value is
+set to `api.github.com`. 
 
 4. Creating a `.gitkeep` file in the `./src/api/`.
 
