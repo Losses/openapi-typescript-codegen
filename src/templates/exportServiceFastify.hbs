@@ -36,15 +36,7 @@ export type {{{name}}}ErrorResult =
 export interface {{name}}FastifyRouteGeneric {
     Body: 
     {{#if parametersBody}}
-    {{#if parametersBody.properties}}
-    {
-    {{#each parametersBody.properties}}
-    {{{name}}}: {{>type this}};
-    {{/each}}
-    }
-    {{else}}
-    null
-    {{/if}}
+    {{>type parametersBody}}
     {{else}}
     null
     {{/if}}
