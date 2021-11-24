@@ -1,8 +1,8 @@
 {
     "name": "@jbcz/openapi-hooks-codegen",
-    "version": "0.0.32",
+    "version": "0.0.33",
     "description": "Library that generates React Hooks based on the OpenAPI specification.",
-    "author": "Ferdi Koomen",
+    "author": "Jibencaozuo Playground",
     "homepage": "https://github.com/jibencaozuo-playground/openapi-hooks-codegen",
     "repository": {
         "type": "git",
@@ -22,7 +22,6 @@
         "yaml",
         "json",
         "fetch",
-        "xhr",
         "node"
     ],
     "maintainers": [
@@ -36,7 +35,8 @@
     "types": "types/index.d.ts",
     "bin": {
         "openapi": "bin/index.js",
-        "openapi-sync-gitea": "bin/syncGitea.js"
+        "openapi-sync-gitea": "bin/syncGitea.js",
+        "openapi-sync-github": "bin/syncGitHub.js"
     },
     "files": [
         "bin/index.js",
