@@ -11,6 +11,8 @@ export interface Operation extends OperationParameters {
     deprecated: boolean;
     method: string;
     path: string;
+    pathParameters: string[];
+    pathPattern: string;
     errors: OperationError[];
     results: OperationResponse[];
     okResults: OperationResponse[];

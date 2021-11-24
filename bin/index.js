@@ -12,9 +12,10 @@ const params = program
     .version(pkg.version)
     .requiredOption('-i, --input <value>', 'OpenAPI specification, can be a path, url or string content (required)')
     .requiredOption('-o, --output <value>', 'Output directory (required)')
-    .option('-c, --client <value>', 'HTTP client to generate [fetch, xhr, node]', 'fetch')
+    .option('-c, --client <value>', 'HTTP client to generate [fetch, node]', 'fetch')
     .option('--useOptions', 'Use options instead of arguments')
     .option('--useUnionTypes', 'Use union types instead of enums')
+    .option('--variation <value>', 'Generate codes for [react-hook, fastify]', 'react-hook')
     .option('--exportCore <value>', 'Write core files to disk', true)
     .option('--exportServices <value>', 'Write services to disk', true)
     .option('--exportModels <value>', 'Write models to disk', true)
@@ -37,6 +38,7 @@ if (OpenAPI) {
         httpClient: params.client,
         useOptions: params.useOptions,
         useUnionTypes: params.useUnionTypes,
+        variation: params.variation,
         exportCore: JSON.parse(params.exportCore) === true,
         exportServices: JSON.parse(params.exportServices) === true,
         exportModels: JSON.parse(params.exportModels) === true,

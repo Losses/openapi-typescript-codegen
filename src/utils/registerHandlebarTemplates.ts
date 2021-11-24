@@ -30,6 +30,7 @@ import nodeRequest from '../templates/core/node/request.hbs';
 import nodeSendRequest from '../templates/core/node/sendRequest.hbs';
 import templateCoreSettings from '../templates/core/OpenAPI.hbs';
 import templateCoreRequest from '../templates/core/request.hbs';
+import fetchRequestReactHookRequest from '../templates/core/requestReactHook.hbs';
 import xhrGetHeaders from '../templates/core/xhr/getHeaders.hbs';
 import xhrGetRequestBody from '../templates/core/xhr/getRequestBody.hbs';
 import xhrGetResponseBody from '../templates/core/xhr/getResponseBody.hbs';
@@ -39,7 +40,8 @@ import xhrSendRequest from '../templates/core/xhr/sendRequest.hbs';
 import templateExportModel from '../templates/exportModel.hbs';
 import templateExportSchema from '../templates/exportSchema.hbs';
 import templateExportSchemaCjs from '../templates/exportSchemaCjs.hbs';
-import templateExportService from '../templates/exportService.hbs';
+import templateExportFastifyService from '../templates/exportServiceFastify.hbs';
+import templateExportReactHookService from '../templates/exportServiceReactHook.hbs';
 import templateValidatorGenerator from '../templates/exportValidatorGenerator.hbs';
 import templateIndex from '../templates/index.hbs';
 import partialBase from '../templates/partials/base.hbs';
@@ -80,7 +82,8 @@ export interface Templates {
         model: Handlebars.TemplateDelegate;
         schema: Handlebars.TemplateDelegate;
         schemaCjs: Handlebars.TemplateDelegate;
-        service: Handlebars.TemplateDelegate;
+        fastifyService: Handlebars.TemplateDelegate;
+        reactHookService: Handlebars.TemplateDelegate;
         validatorGenerator: Handlebars.TemplateDelegate;
     };
     core: {
@@ -89,6 +92,7 @@ export interface Templates {
         apiRequestOptions: Handlebars.TemplateDelegate;
         apiResult: Handlebars.TemplateDelegate;
         request: Handlebars.TemplateDelegate;
+        reactHookRequest: Handlebars.TemplateDelegate;
     };
 }
 
@@ -106,7 +110,8 @@ export function registerHandlebarTemplates(root: RequiredOptions): Templates {
             model: Handlebars.template(templateExportModel),
             schema: Handlebars.template(templateExportSchema),
             schemaCjs: Handlebars.template(templateExportSchemaCjs),
-            service: Handlebars.template(templateExportService),
+            fastifyService: Handlebars.template(templateExportFastifyService),
+            reactHookService: Handlebars.template(templateExportReactHookService),
             validatorGenerator: Handlebars.template(templateValidatorGenerator),
         },
         core: {
@@ -115,6 +120,7 @@ export function registerHandlebarTemplates(root: RequiredOptions): Templates {
             apiRequestOptions: Handlebars.template(templateCoreApiRequestOptions),
             apiResult: Handlebars.template(templateCoreApiResult),
             request: Handlebars.template(templateCoreRequest),
+            reactHookRequest: Handlebars.template(fetchRequestReactHookRequest),
         },
     };
 
@@ -168,6 +174,7 @@ export function registerHandlebarTemplates(root: RequiredOptions): Templates {
     Handlebars.registerPartial('fetch/getResponseHeader', Handlebars.template(fetchGetResponseHeader));
     Handlebars.registerPartial('fetch/sendRequest', Handlebars.template(fetchSendRequest));
     Handlebars.registerPartial('fetch/request', Handlebars.template(fetchRequest));
+    Handlebars.registerPartial('fetch/requestReactHook', Handlebars.template(fetchRequestReactHookRequest));
 
     // Specific files for the xhr client implementation
     Handlebars.registerPartial('xhr/getHeaders', Handlebars.template(xhrGetHeaders));

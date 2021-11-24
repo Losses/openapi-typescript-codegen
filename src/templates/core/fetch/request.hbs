@@ -11,9 +11,9 @@ import type { BaseApiRequestOptions, ApiRequestOptions } from './ApiRequestOptio
 import type { ApiResult } from './ApiResult';
 import { OpenAPI } from './OpenAPI';
 
-import { atom, useAtom, SetStateAction } from 'jotai';
-
-export const globalOptionsAtom = atom<BaseApiRequestOptions>({});
+{{#equals variation 'react-hook'}}
+export * from './requestReactHook';
+{{/equals}}
 
 {{>functions/isDefined}}
 
@@ -106,51 +106,4 @@ export async function request<DataType, ErrorType>(
         statusText: response.statusText,
         body: responseHeader || responseBody,
     };
-}
-
-export enum RequestStatus {
-    NotReady = 'NotReady',
-    Loading = 'Loading',
-    Success = 'Success',
-    Error = 'Error',
-}
-
-export interface INotReadyState<DataType = void, ErrorType = void> {
-    status: RequestStatus.NotReady;
-    error: ErrorType | null;
-    data: DataType | null;
-}
-
-export interface ILoadingState<DataType = void, ErrorType = void> {
-    status: RequestStatus.Loading;
-    error: ErrorType | null;
-    data: DataType | null;
-}
-
-export interface ISuccessState<DataType = void> {
-    status: RequestStatus.Success;
-    error: null;
-    data: DataType;
-}
-
-export interface IFailedState<ErrorType = void> {
-    status: RequestStatus.Error;
-    error: ErrorType | null;
-    data: null
-}
-
-export type ResultType<T> = T extends () => readonly [infer R, any] ? R : never
-
-export type ResultState<DataType = void, ErrorType = void> =
-    | INotReadyState<DataType, ErrorType>
-    | ILoadingState<DataType, ErrorType>
-    | ISuccessState<DataType>
-    | IFailedState<ErrorType>
-
-export interface IActionCallback<DataType = void, ErrorType = void> {
-    (
-        atom: ResultState<DataType, ErrorType>,
-        set: (update: SetStateAction<ResultState<DataType, ErrorType>>) => void,
-        result: ApiResult<DataType, true> | ApiResult<ErrorType | null, false>
-    ): void;
 }

@@ -1,8 +1,7 @@
 import { resolve } from 'path';
 
-import { RequiredOptions } from '../index';
-
 import type { Client } from '../client/interfaces/Client';
+import { RequiredOptions } from '../index';
 import { copyFile, exists, writeFile } from './fileSystem';
 import { Templates } from './registerHandlebarTemplates';
 
@@ -12,12 +11,13 @@ import { Templates } from './registerHandlebarTemplates';
  * @param templates The loaded handlebar templates
  * @param outputPath Directory to write the generated files to
  */
-export async function writeClientCore(client: Client, templates: Templates, outputPath: string, { httpClient, request, runtimeValidation }: RequiredOptions): Promise<void> {
+export async function writeClientCore(client: Client, templates: Templates, outputPath: string, { variation, httpClient, request, runtimeValidation }: RequiredOptions): Promise<void> {
     const context = {
         httpClient: httpClient,
         server: client.server,
         version: client.version,
         runtimeValidation: runtimeValidation,
+        variation,
     };
 
     await writeFile(resolve(outputPath, 'OpenAPI.ts'), templates.core.settings(context));
@@ -25,6 +25,10 @@ export async function writeClientCore(client: Client, templates: Templates, outp
     await writeFile(resolve(outputPath, 'ApiRequestOptions.ts'), templates.core.apiRequestOptions({}));
     await writeFile(resolve(outputPath, 'ApiResult.ts'), templates.core.apiResult({}));
     await writeFile(resolve(outputPath, 'request.ts'), templates.core.request(context));
+
+    if (variation === 'react-hook') {
+        await writeFile(resolve(outputPath, 'requestReactHook.ts'), templates.core.reactHookRequest(context));
+    }
 
     if (request) {
         const requestFile = resolve(process.cwd(), request);

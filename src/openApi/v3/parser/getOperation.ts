@@ -16,6 +16,8 @@ import { getRef } from './getRef';
 import { getServiceClassName } from './getServiceClassName';
 import { sortByRequired } from './sortByRequired';
 
+const PARAMETERS = /\${(.+?)}/gm;
+
 export function getOperation(openApi: OpenApi, url: string, method: string, op: OpenApiOperation, pathParams: OperationParameters): Operation {
     const serviceName = op.tags?.[0] || 'Service';
     const serviceClassName = getServiceClassName(serviceName);
@@ -33,6 +35,8 @@ export function getOperation(openApi: OpenApi, url: string, method: string, op: 
         deprecated: op.deprecated === true,
         method: method.toUpperCase(),
         path: operationPath,
+        pathPattern: operationPath.replaceAll(':', '::').replaceAll(PARAMETERS, ':$1'),
+        pathParameters: [...operationPath.matchAll(PARAMETERS)].map(match => match[1]),
         parameters: [...pathParams.parameters],
         parametersPath: [...pathParams.parametersPath],
         parametersQuery: [...pathParams.parametersQuery],

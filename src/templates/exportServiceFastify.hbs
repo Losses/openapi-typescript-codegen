@@ -1,0 +1,79 @@
+{{>header}}
+
+import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
+
+{{#if throwOnRequestFailed}}
+import { ApiError } from '../core/ApiError';
+{{/if}}
+
+{{#if imports}}
+{{#each imports}}
+import type { {{{this}}} } from '../models/{{{this}}}';
+{{/each}}
+{{/if}}
+
+{{#each operations}}
+
+export type {{{name}}}OkResult =
+{{#each okResults}}
+  | {{{base}}}
+{{else}}
+  | void
+{{/each}};
+
+export type {{{name}}}ErrorResult =
+{{#each errorResults}}
+  | {{{base}}}
+{{else}}
+  | void
+{{/each}};
+
+{{/each}};
+
+
+{{#each operations}}
+
+export interface {{name}}FastifyRouteGeneric {
+    Body: 
+    {{#if parametersBody}}
+    {{#if parametersBody.properties}}
+    {
+    {{#each parametersBody.properties}}
+    {{{name}}}: {{>type this}};
+    {{/each}}
+    }
+    {{else}}
+    null
+    {{/if}}
+    {{else}}
+    null
+    {{/if}}
+    ;
+    Querystring: {
+        {{#each parametersQuery}}
+        {{{name}}}: string;
+        {{/each}}
+    };
+    Params: {
+        {{#each pathParameters}}
+        {{{this}}}: string;
+        {{/each}}
+    };
+    Headers: {
+        {{#each headers}}
+        {{{this}}}: string;
+        {{/each}}
+    }
+}
+
+export const {{{name}}}Router = (
+    fastify: FastifyInstance,
+    callback: (
+        request: FastifyRequest<{{name}}FastifyRouteGeneric>, 
+        reply: FastifyReply
+    ) => void | Promise<{{{name}}}OkResult | {{{name}}}ErrorResult>
+) => {
+    fastify.{{{toLowerCase method}}}('{{{pathPattern}}}', callback);
+}
+
+{{/each}}

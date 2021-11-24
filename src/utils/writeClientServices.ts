@@ -1,3 +1,4 @@
+import type { TemplateDelegate } from 'handlebars/runtime';
 import { resolve } from 'path';
 
 import type { Service } from '../client/interfaces/Service';
@@ -18,13 +19,26 @@ export async function writeClientServices(
     services: Service[],
     templates: Templates,
     outputPath: string,
-    { httpClient, useUnionTypes, useOptions, runtimeValidation, precompileValidator, throwOnRequestFailed, verboseHttpLog }: RequiredOptions
+    { variation, httpClient, useUnionTypes, useOptions, runtimeValidation, precompileValidator, throwOnRequestFailed, verboseHttpLog }: RequiredOptions
 ): Promise<void> {
+    let template: TemplateDelegate;
+
+    switch (variation) {
+        case 'react-hook':
+            template = templates.exports.reactHookService;
+            break;
+        case 'fastify':
+            template = templates.exports.fastifyService;
+            break;
+        default:
+            throw new Error(`Unknown variation: ${variation}`);
+    }
+
     for (const service of services) {
         const file = resolve(outputPath, `${service.name}.ts`);
         const useVersion = service.operations.some(operation => operation.path.includes(VERSION_TEMPLATE_STRING));
 
-        const templateResult = templates.exports.service({
+        const templateResult = template({
             ...service,
             httpClient,
             useUnionTypes,

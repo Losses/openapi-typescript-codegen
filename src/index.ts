@@ -15,6 +15,7 @@ export interface Options {
     httpClient?: HttpClient;
     useOptions?: boolean;
     useUnionTypes?: boolean;
+    variation?: string;
     exportCore?: boolean;
     exportServices?: boolean;
     exportModels?: boolean;
@@ -36,6 +37,7 @@ const DEFAULT_PARAMETERS = {
     httpClient: HttpClient.FETCH,
     useOptions: false,
     useUnionTypes: false,
+    variation: 'react-hook',
     exportCore: true,
     exportServices: true,
     exportModels: true,

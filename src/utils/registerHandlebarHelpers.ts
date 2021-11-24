@@ -51,4 +51,8 @@ export function registerHandlebarHelpers(root: { httpClient: HttpClient; useOpti
                 .join(' | ')
         );
     });
+
+    Handlebars.registerHelper('toLowerCase', function (str) {
+        return str.toLowerCase();
+    });
 }
