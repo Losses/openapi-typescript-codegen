@@ -43,9 +43,9 @@ export type {{{name}}}ErrorResult =
 {{#each operations}}
 
 interface BlockedOption {
-    method: never;
-    url: never;
-    handler: never;
+    method?: never;
+    url?: never;
+    handler?: never;
 }
 
 export interface {{name}}FastifyRouteGeneric {
