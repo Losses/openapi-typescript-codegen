@@ -82,7 +82,6 @@ export const {{{name}}}Router = (
             RawServerDefault,
             RawRequestDefaultExpression,
             RawReplyDefaultExpression,
-            listUserFastifyRouteGeneric,
             {{name}}FastifyRouteGeneric
         >,
     ) => void | Promise<{{{name}}}OkResult | {{{name}}}ErrorResult>,
@@ -96,7 +95,7 @@ export const {{{name}}}Router = (
         >, keyof BlockedOption
     > & BlockedOption
 ) => {
-    fastify.route({
+    return fastify.route({
         method: '{{{method}}}',
         url: '{{{pathPattern}}}',
         handler: callback,
