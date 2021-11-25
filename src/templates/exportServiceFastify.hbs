@@ -1,6 +1,15 @@
 {{>header}}
 
-import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
+import type {
+    FastifyInstance,
+    FastifyRequest,
+    FastifyReply,
+    RouteOptions,
+    RawServerDefault,
+    RawRequestDefaultExpression,
+    RawReplyDefaultExpression,
+    ContextConfigDefault
+} from 'fastify';
 
 {{#if throwOnRequestFailed}}
 import { ApiError } from '../core/ApiError';
@@ -33,8 +42,14 @@ export type {{{name}}}ErrorResult =
 
 {{#each operations}}
 
+interface BlockedOption {
+    method: never;
+    url: never;
+    handler: never;
+}
+
 export interface {{name}}FastifyRouteGeneric {
-    Body: 
+    Body:
     {{#if parametersBody}}
     {{>type parametersBody}}
     {{else}}
@@ -55,17 +70,38 @@ export interface {{name}}FastifyRouteGeneric {
         {{#each headers}}
         {{{this}}}: string;
         {{/each}}
-    }
+    };
+    Reply: {{{name}}}OkResult | {{{name}}}ErrorResult;
 }
 
 export const {{{name}}}Router = (
     fastify: FastifyInstance,
     callback: (
-        request: FastifyRequest<{{name}}FastifyRouteGeneric>, 
-        reply: FastifyReply
-    ) => void | Promise<{{{name}}}OkResult | {{{name}}}ErrorResult>
+        request: FastifyRequest<{{name}}FastifyRouteGeneric>,
+        reply: FastifyReply<
+            RawServerDefault,
+            RawRequestDefaultExpression,
+            RawReplyDefaultExpression,
+            listUserFastifyRouteGeneric,
+            {{name}}FastifyRouteGeneric
+        >,
+    ) => void | Promise<{{{name}}}OkResult | {{{name}}}ErrorResult>,
+    options?: Omit<
+        RouteOptions<
+            RawServerDefault,
+            RawRequestDefaultExpression,
+            RawReplyDefaultExpression,
+            {{name}}FastifyRouteGeneric,
+            ContextConfigDefault
+        >, keyof BlockedOption
+    > & BlockedOption
 ) => {
-    fastify.{{{toLowerCase method}}}('{{{pathPattern}}}', callback);
+    fastify.route({
+        method: '{{{method}}}',
+        url: '{{{pathPattern}}}',
+        handler: callback,
+        ...options,
+    });
 }
 
 {{/each}}
