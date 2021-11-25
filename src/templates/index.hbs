@@ -38,4 +38,6 @@ export * from './services/{{{name}}}';
 {{/if}}
 {{/if}}
 
+{{#equals variation 'react-hook'}}
 export { globalOptionsAtom } from './core/request';
+{{/equals}}

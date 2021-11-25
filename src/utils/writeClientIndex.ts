@@ -20,7 +20,7 @@ export async function writeClientIndex(
     client: Client,
     templates: Templates,
     outputPath: string,
-    { exportCore, exportServices, exportModels, exportSchemas, useUnionTypes }: RequiredOptions
+    { exportCore, exportServices, exportModels, exportSchemas, useUnionTypes, variation }: RequiredOptions
 ): Promise<void> {
     await writeFile(
         resolve(outputPath, 'index.ts'),
@@ -30,6 +30,7 @@ export async function writeClientIndex(
             exportModels,
             exportSchemas,
             useUnionTypes,
+            variation,
             server: client.server,
             version: client.version,
             models: sortModelsByName(client.models),
