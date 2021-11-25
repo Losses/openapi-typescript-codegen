@@ -84,7 +84,11 @@ export const {{{name}}}Router = (
             RawReplyDefaultExpression,
             {{name}}FastifyRouteGeneric
         >,
-    ) => void | Promise<{{{name}}}OkResult | {{{name}}}ErrorResult>,
+    ) => void | Promise<
+        | void
+        | {{{name}}}OkResult
+        | {{{name}}}ErrorResult
+    >,
     options?: Omit<
         RouteOptions<
             RawServerDefault,
