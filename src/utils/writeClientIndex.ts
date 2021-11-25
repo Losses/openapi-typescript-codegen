@@ -1,8 +1,7 @@
 import { resolve } from 'path';
 
-import { RequiredOptions } from '../index';
-
 import type { Client } from '../client/interfaces/Client';
+import { RequiredOptions } from '../index';
 import { writeFile } from './fileSystem';
 import { Templates } from './registerHandlebarTemplates';
 import { sortModelsByName } from './sortModelsByName';
