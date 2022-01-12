@@ -29,8 +29,14 @@ import { ${{{this}}} } from '../schemas/${{{this}}}';
 {{/if}}
 {{/if}}
 
-import { RequestStatus, globalOptionsAtom, request as __request } from '../core/request';
-import type { ResultState, IActionCallback } from '../core/request';
+import {
+  request as __request,
+} from '../core/request';
+import {
+  RequestStatus,
+  globalOptionsAtom,
+} from "../core/requestReactHook";
+import type { ResultState, IActionCallback } from "../core/requestReactHook";
 import { BaseApiRequestOptions, ApiRequestOptions } from '../core/ApiRequestOptions';
 import { ApiResult } from '../core/ApiResult';
 {{#if @root.useVersion}}
